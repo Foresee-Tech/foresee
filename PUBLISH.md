@@ -49,8 +49,10 @@ git push -u origin main
 # enable, paste beta key: informationwantstobefree
 ```
 
-## Community submission (Phase 6)
+<!--
+  NOTE: Submitting to Anthropic's public community marketplace is intentionally
+  NOT documented here and should not be done yet. The plugin is distributed only
+  via the private `Dagulf795/standard-clearing` marketplace above. Do not submit
+  to platform.claude.com without an explicit decision to go public.
+-->
 
-Once the hosted MCP endpoint is live and the public repo is up, submit via
-`platform.claude.com/plugins/submit` (individual-author path). On approval the plugin
-is pinned to a commit SHA and synced nightly into `anthropics/claude-plugins-community`.
