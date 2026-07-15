@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "standard-clearing",
+  "description": "Deterministic auto-insurance quote estimates from published rate filings.",
+  "owner": {
+    "name": "Standard Clearing"
+  },
+  "plugins": [
+    {
+      "name": "standard-clearing",
+      "description": "Deterministic auto-insurance quote estimates. Compare car-insurance rates across major carriers (State Farm, GEICO, Progressive, Allstate, Liberty Mutual, USAA and more) using published SERFF rate filings. Gathers a driver/vehicle profile conversationally and returns per-carrier monthly price ranges with uncertainty, not marketing leads.",
+      "author": {
+        "name": "Standard Clearing"
+      },
+      "category": "personal-finance",
+      "source": "./plugins/standard-clearing",
+      "homepage": "https://github.com/Dagulf795/standard-clearing"
+    }
+  ]
+}

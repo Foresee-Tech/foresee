@@ -1,0 +1,30 @@
+{
+  "name": "standard-clearing",
+  "version": "0.1.0",
+  "description": "Deterministic auto-insurance quote estimates. Compare car-insurance rates across major carriers (State Farm, GEICO, Progressive, Allstate, Liberty Mutual, USAA and more) using published SERFF rate filings. Gathers a driver/vehicle profile conversationally and returns per-carrier monthly price ranges with uncertainty, not marketing leads.",
+  "author": {
+    "name": "Standard Clearing"
+  },
+  "homepage": "https://github.com/Dagulf795/standard-clearing",
+  "repository": "https://github.com/Dagulf795/standard-clearing",
+  "license": "MIT",
+  "keywords": [
+    "insurance",
+    "auto-insurance",
+    "car-insurance",
+    "quotes",
+    "rates",
+    "rate-comparison",
+    "personal-finance"
+  ],
+  "defaultEnabled": false,
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "API key",
+      "description": "Standard Clearing API key. During the beta, use: informationwantstobefree",
+      "required": true,
+      "sensitive": true
+    }
+  }
+}
