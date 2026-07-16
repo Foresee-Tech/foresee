@@ -22,7 +22,7 @@
     "api_key": {
       "type": "string",
       "title": "API key",
-      "description": "Standard Clearing API key. During the beta, use: informationwantstobefree",
+      "description": "Your Standard Clearing API key.",
       "required": true,
       "sensitive": true
     }
