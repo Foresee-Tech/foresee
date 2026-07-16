@@ -1,13 +1,13 @@
 ---
 name: explain-coverage
-description: This skill should be used when the user asks what auto-insurance coverage means or which limits/tiers to choose — e.g. "what does 100/300 mean", "explain liability vs full coverage", "what deductible should I pick", "what coverage do I need in <state>", or wants the difference between minimum/standard/premium coverage. Explains coverage using the carrier/tier data the engines expose.
+description: This skill should be used when the user asks what auto-insurance coverage means or which limits/tiers to choose — e.g. "what does 100/300 mean", "explain liability vs full coverage", "what deductible should I pick", "what coverage do I need in <state>", or wants the difference between minimum/standard/premium coverage.
 version: 0.1.0
 ---
 
 # Explain Coverage
 
 Explain auto-insurance coverage terms, limits, and tiers in plain language, grounded
-in the tier/limit data the `standard-clearing` engines expose for real carriers.
+in the carrier/tier data the `standard-clearing` MCP tools return.
 
 ## When this applies
 
@@ -19,7 +19,7 @@ what coverage they should carry.
 
 1. If the question is state- or carrier-specific, call
    **`auto_insurance_engine_coverage`** for the user's state to ground the answer in
-   the actual tiers and carriers available (each carrier entry includes its `tiers`).
+   the actual tiers and carriers available.
 2. Explain the concepts the user asked about:
    - **Liability (BI/PD)** — e.g. `100/300/100` = $100k per person / $300k per
      accident bodily injury, $100k property damage.

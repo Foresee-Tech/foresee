@@ -1,14 +1,14 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "standard-clearing",
-  "description": "Deterministic auto-insurance quote estimates from published rate filings.",
+  "description": "Auto-insurance quote estimates for Claude.",
   "owner": {
     "name": "Standard Clearing"
   },
   "plugins": [
     {
       "name": "standard-clearing",
-      "description": "Deterministic auto-insurance quote estimates. Compare car-insurance rates across major carriers (State Farm, GEICO, Progressive, Allstate, Liberty Mutual, USAA and more) using published SERFF rate filings. Gathers a driver/vehicle profile conversationally and returns per-carrier monthly price ranges with uncertainty, not marketing leads.",
+      "description": "Auto-insurance quote estimates inside Claude. Compare car-insurance rates across major carriers (State Farm, GEICO, Progressive, Allstate, Liberty Mutual, USAA and more) — describe your car and driver profile and get per-carrier monthly price ranges, not marketing leads.",
       "author": {
         "name": "Standard Clearing"
       },
