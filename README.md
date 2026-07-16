@@ -1,6 +1,8 @@
 # Standard Clearing
 
-Auto-insurance quote estimates for Claude.
+Auto-insurance quote estimates for Claude. Ask in plain English — e.g. *"how much
+would car insurance cost for a 2022 Camry in NY?"* — and get per-carrier monthly
+price estimates.
 
 ## Install
 
@@ -10,7 +12,3 @@ Auto-insurance quote estimates for Claude.
 ```
 
 On enable, Claude prompts for an API key.
-
-## License
-
-MIT — see `LICENSE`.

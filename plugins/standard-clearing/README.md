@@ -1,13 +1,8 @@
 # Standard Clearing
 
-Auto-insurance quote estimates inside Claude. Ask for a car-insurance quote or
-compare carriers in plain English.
-
-## Skills
-
-- `/standard-clearing:quote-my-car`
-- `/standard-clearing:compare-carriers`
-- `/standard-clearing:explain-coverage`
+Auto-insurance quote estimates for Claude. Ask in plain English — e.g. *"how much
+would car insurance cost for a 2022 Camry in NY?"* — and get per-carrier monthly
+price estimates, or compare carriers.
 
 ## Install
 
@@ -17,7 +12,3 @@ compare carriers in plain English.
 ```
 
 On enable, Claude prompts for an API key.
-
-## License
-
-MIT — see `LICENSE`.
