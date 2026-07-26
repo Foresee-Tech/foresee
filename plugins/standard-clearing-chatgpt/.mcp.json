@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "standard-clearing": {
+      "type": "http",
+      "url": "https://standard-clearing-mcp-1026846013023.us-central1.run.app/mcp"
+    }
+  }
+}

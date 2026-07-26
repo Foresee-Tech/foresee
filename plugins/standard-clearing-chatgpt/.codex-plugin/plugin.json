@@ -1,0 +1,37 @@
+{
+  "name": "standard-clearing",
+  "version": "0.1.0",
+  "description": "Auto-insurance quote estimates inside ChatGPT and Codex. Compare car-insurance rates across major carriers (State Farm, GEICO, Progressive, Allstate, Liberty Mutual, USAA and more) — describe your car and driver profile and get per-carrier monthly price ranges, not marketing leads.",
+  "author": {
+    "name": "Standard Clearing"
+  },
+  "homepage": "https://github.com/Dagulf795/standard-clearing",
+  "repository": "https://github.com/Dagulf795/standard-clearing",
+  "license": "MIT",
+  "keywords": [
+    "insurance",
+    "auto-insurance",
+    "car-insurance",
+    "quotes",
+    "rates",
+    "rate-comparison",
+    "personal-finance"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Standard Clearing",
+    "shortDescription": "Compare car-insurance price estimates across major carriers.",
+    "longDescription": "Describe your car and driver profile and get per-carrier monthly price ranges from filing-derived rate engines — not marketing leads. Compare State Farm, GEICO, Progressive, Allstate, Liberty Mutual, USAA and more. Beta: Utah only; estimates, not bindable quotes.",
+    "developerName": "Standard Clearing",
+    "category": "Finance",
+    "capabilities": ["Read"],
+    "websiteURL": "https://github.com/Dagulf795/standard-clearing",
+    "defaultPrompt": [
+      "How much would car insurance cost for a 2020 Honda Civic?",
+      "Compare car insurance carriers for a 35-year-old in Utah.",
+      "What does 100/300/100 liability coverage mean?"
+    ],
+    "brandColor": "#10A37F"
+  }
+}

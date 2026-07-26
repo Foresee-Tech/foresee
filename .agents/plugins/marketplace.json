@@ -1,0 +1,20 @@
+{
+  "name": "standard-clearing",
+  "interface": {
+    "displayName": "Standard Clearing"
+  },
+  "plugins": [
+    {
+      "name": "standard-clearing",
+      "source": {
+        "source": "local",
+        "path": "./plugins/standard-clearing-chatgpt"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Finance"
+    }
+  ]
+}
