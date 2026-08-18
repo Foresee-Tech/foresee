@@ -1,20 +1,20 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "standard-clearing",
+  "name": "foresee",
   "description": "Auto-insurance quote estimates for Claude.",
   "owner": {
-    "name": "Standard Clearing"
+    "name": "Foresee"
   },
   "plugins": [
     {
-      "name": "standard-clearing",
-      "description": "Auto-insurance quote estimates inside Claude. Compare car-insurance rates across major carriers (State Farm, GEICO, Progressive, Allstate, Liberty Mutual, USAA and more) — describe your car and driver profile and get per-carrier monthly price ranges, not marketing leads.",
+      "name": "foresee",
+      "description": "Auto-insurance quote estimates inside Claude. Compare car-insurance rates across major carriers (State Farm, GEICO, Progressive, Allstate, Liberty Mutual, USAA and more) — describe your car and driver profile and get a per-carrier monthly point estimate with a confidence interval and full sub-coverage detail, not marketing leads.",
       "author": {
-        "name": "Standard Clearing"
+        "name": "Foresee"
       },
       "category": "personal-finance",
-      "source": "./plugins/standard-clearing",
-      "homepage": "https://github.com/Dagulf795/standard-clearing"
+      "source": "./plugins/foresee",
+      "homepage": "https://github.com/Foresee-Tech/foresee"
     }
   ]
 }
