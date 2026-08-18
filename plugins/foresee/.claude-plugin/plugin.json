@@ -1,0 +1,30 @@
+{
+  "name": "foresee",
+  "version": "0.2.0",
+  "description": "Auto-insurance quote estimates inside Claude. Compare car-insurance rates across major carriers (State Farm, GEICO, Progressive, Allstate, Liberty Mutual, USAA and more) — describe your car and driver profile and get a per-carrier monthly point estimate with a confidence interval and full sub-coverage detail, not marketing leads.",
+  "author": {
+    "name": "Foresee"
+  },
+  "homepage": "https://github.com/Foresee-Tech/foresee",
+  "repository": "https://github.com/Foresee-Tech/foresee",
+  "license": "MIT",
+  "keywords": [
+    "insurance",
+    "auto-insurance",
+    "car-insurance",
+    "quotes",
+    "rates",
+    "rate-comparison",
+    "personal-finance"
+  ],
+  "defaultEnabled": false,
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "API key",
+      "description": "Your Foresee API key.",
+      "required": true,
+      "sensitive": true
+    }
+  }
+}

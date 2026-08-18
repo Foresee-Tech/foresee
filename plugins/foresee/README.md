@@ -2,7 +2,8 @@
 
 Auto-insurance quote estimates for Claude. Ask in plain English — e.g. *"how much
 would car insurance cost for a 2022 Camry in NY?"* — and get a per-carrier monthly
-point estimate with a confidence interval.
+point estimate with a confidence interval and full sub-coverage detail, or compare
+carriers.
 
 ## Install
 
