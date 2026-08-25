@@ -1,7 +1,7 @@
 ---
 name: compare-carriers
 description: This skill should be used when the user wants to compare auto-insurance carriers or shop around — e.g. "compare car insurance companies", "who is cheapest for me", "is GEICO or Progressive cheaper", "should I switch from State Farm", or asks which carrier to pick. Ranks per-carrier point estimates and reasons about the coverage ladder across carriers.
-version: 0.2.0
+version: 0.3.0
 ---
 
 # Compare Carriers
@@ -20,14 +20,25 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
 1. Gather profile basics (see the `quote-my-car` skill for the field list). State/ZIP
    is essential; the rest improves accuracy.
 2. If the user named specific carriers, pass them via the `carriers` argument (carrier
-   keys like `geico`, `progressive`, `statefarm`, `allstate`, `libertymutual`,
-   `usaa`). Otherwise omit it to compare everything available in that state.
+   keys like `geico`, `progressive`, `statefarm`, `allstate`, `mercury`, `kemper`,
+   `csaa`, `farmers`, `usaa`). Otherwise omit it to compare everything available in
+   that state.
 3. Call **`auto_insurance_quote_profile`** for the point estimate per carrier. Each
    carrier comes back with `monthly`, a `confidence_interval`, a `cells` sub-coverage
    breakdown, and (where loaded) `coverage_options` — the filed limits/deductibles that
-   carrier actually offers.
-4. Optionally call **`auto_insurance_engine_coverage`** first to see which carriers are
-   available for the state, so you can frame what's covered.
+   carrier actually offers. There is no separate serviceability tool: the quote tool
+   self-gates on state (an uncovered state gets a clear error naming the live states)
+   and its response carries `serviceable_states` and `failures`.
+4. If the response includes **`dispatched_agents`**, more carriers are being quoted
+   live by Foresee agents (browser agents on carrier sites, email agents via partner
+   agencies). Mention them, and after a minute or two call **`check_agent_quotes`**
+   with the `dispatch_id` to fold the results into the comparison — call out anything
+   now cheaper than the previous best.
+5. When the user settles on a carrier and wants to buy ("bind", "buy", "purchase",
+   "let's do it"), the purchase flow runs in Foresee: call **`purchase_quote`** and
+   render the returned `payment_url` as a clickable link on its own line. After they
+   report paying, call **`check_purchase_status`** and relay its confirmation message.
+   Route buy intent through these tools rather than redirecting the user elsewhere.
 
 ## Presenting results
 
