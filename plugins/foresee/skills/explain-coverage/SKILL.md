@@ -1,7 +1,7 @@
 ---
 name: explain-coverage
 description: This skill should be used when the user asks what auto-insurance coverage means or which limits/deductibles to choose — e.g. "what does 100/300 mean", "explain liability vs full coverage", "what deductible should I pick", "what coverage do I need in <state>", or wants to understand how changing a limit or deductible changes the price.
-version: 0.2.0
+version: 0.3.0
 ---
 
 # Explain Coverage
@@ -18,9 +18,11 @@ their price.
 
 ## How to run it
 
-1. If the question is state- or carrier-specific, call
-   **`auto_insurance_engine_coverage`** for the user's state to ground the answer in
-   the carriers and filed coverage actually available.
+1. If the question is state- or carrier-specific, ground it with
+   **`auto_insurance_quote_profile`** — its response carries the carriers actually
+   priced for that state, each carrier's `coverage_options` (the filed
+   limit/deductible ladder) and `cells` breakdown, plus `serviceable_states`. There
+   is no separate coverage/serviceability tool.
 2. Explain the concepts the user asked about:
    - **Liability (BI/PD)** — e.g. `100/300/100` = $100k per person / $300k per
      accident bodily injury, $100k property damage.

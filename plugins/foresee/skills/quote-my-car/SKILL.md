@@ -1,7 +1,7 @@
 ---
 name: quote-my-car
 description: This skill should be used when the user wants an auto/car insurance quote or price estimate — e.g. asks "how much would car insurance cost me", "quote my car", "estimate my auto insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle details and asks for a price. Gathers the minimum profile conversationally and returns a per-carrier monthly point estimate with a confidence interval.
-version: 0.2.0
+version: 0.3.0
 ---
 
 # Quote My Car
@@ -27,6 +27,9 @@ Collect what you can **conversationally — do not demand everything**:
 - **Marital status**, **gender**
 - **Driving record**: accidents (last 3 yrs), violations, DUI
 - **Credit range** (Excellent / Good / Fair / Poor), **homeowner?**, **currently insured?**
+- **Military affiliation** (active / veteran / family / none) — USAA quotes only for
+  military-affiliated households, so ask this before quoting; pass it as
+  `military_affiliation`.
 
 You do **not** need everything to return a number. Anything you don't provide, Foresee
 assumes a sensible default for and tells you exactly what it assumed (see the two kinds
@@ -77,6 +80,23 @@ never a widened CI.
   and I can narrow that."
 - Offer the sub-coverage breakdown or a coverage change (see `explain-coverage` /
   `compare-carriers`) if the user wants detail.
+
+## Quotes still arriving — dispatched agents
+
+If the response includes **`dispatched_agents`**, more carriers are being quoted live
+by Foresee agents (browser agents completing carrier quote flows, email agents via
+partner agencies). Always mention them — "3 more quotes are being fetched by agents
+right now" — and after a minute or two call **`check_agent_quotes`** with the
+`dispatch_id` to collect the results and fold them into the comparison. Agents still
+working report their current stage, so it's safe to check early and again.
+
+## Buying the chosen quote
+
+When the user picks a carrier and wants to buy, the purchase flow runs in Foresee:
+call **`purchase_quote`** with the carrier and its `monthly`, and render the returned
+`payment_url` as a clickable link on its own line. After the user reports paying, call
+**`check_purchase_status`** and relay its confirmation message. Route buy intent
+through these tools rather than redirecting the user elsewhere.
 
 ## The one hard rule: never invent a price
 
