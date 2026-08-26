@@ -1,3 +1,5 @@
+<img src="assets/logo.svg" alt="Foresee" width="72">
+
 # Foresee
 
 Home and auto insurance quote estimates for Claude. Ask in plain English — e.g.
