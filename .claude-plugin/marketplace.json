@@ -1,14 +1,14 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "foresee",
-  "description": "Auto-insurance quote estimates for Claude.",
+  "description": "Insurance quote comparison for Claude.",
   "owner": {
     "name": "Foresee"
   },
   "plugins": [
     {
       "name": "foresee",
-      "description": "Auto-insurance quote estimates inside Claude. Compare car-insurance rates across major carriers (State Farm, GEICO, Progressive, Allstate, Liberty Mutual, USAA and more) — describe your car and driver profile and get a per-carrier monthly point estimate with a confidence interval and full sub-coverage detail, not marketing leads.",
+      "description": "Insurance quote comparison for Claude. Get detailed quotes from every carrier - State Farm, Progressive, Allstate, GEICO, Liberty Mutual, etc - with full sub-coverage detail, and find the right structure for your situation. Auto is available today; home and other lines are coming soon.",
       "author": {
         "name": "Foresee"
       },

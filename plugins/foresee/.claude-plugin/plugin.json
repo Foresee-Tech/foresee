@@ -1,7 +1,7 @@
 {
   "name": "foresee",
   "version": "0.2.0",
-  "description": "Auto-insurance quote estimates inside Claude. Compare car-insurance rates across major carriers (State Farm, GEICO, Progressive, Allstate, Liberty Mutual, USAA and more) — describe your car and driver profile and get a per-carrier monthly point estimate with a confidence interval and full sub-coverage detail, not marketing leads.",
+  "description": "Insurance quote estimates inside Claude — real premiums computed from carriers' filed rate manuals, not marketing leads. Auto is available today: compare rates across major carriers (State Farm, GEICO, Progressive, Allstate, Liberty Mutual, USAA and more) and get a per-carrier monthly point estimate with a confidence interval and full sub-coverage detail. Home and other lines are coming soon.",
   "author": {
     "name": "Foresee"
   },
