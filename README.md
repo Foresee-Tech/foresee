@@ -2,11 +2,13 @@
 
 # Foresee
 
-Insurance quote estimates for Claude. Ask in plain English — e.g.
-*"how much would car insurance cost for a 2022 Camry in NY?"*, get a full and
-transparent answer with all your options, then head to the carrier to finish.
+AI should buy your home and auto insurance. Foresee returns accurate quotes from every carrier as structured objects that agents can reason about.
 
-> **Auto only for now.** Foresee estimates auto insurance today — home and other lines are coming soon.
+*"How much would auto insurance cost for a 25 year old driving a 2022 Camry in Sacramento?"*
+*"Do I need a high deductible? Which insurer is best for premium coverage?"*
+*"Am I eligible for any group discounts?"*
+
+> **Foresee is currently only live with California auto insurance - more states and lines coming soon.** 
 
 <a href="https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=Foresee&connectorUrl=https%3A%2F%2Fforesee-mcp-1026846013023.us-central1.run.app%2Fmcp" target="_blank" rel="noopener">→ Add Foresee to Claude</a> (recommended)
 
