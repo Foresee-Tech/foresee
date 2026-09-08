@@ -1,9 +1,6 @@
 {
   "foresee": {
     "type": "http",
-    "url": "https://foresee-mcp-1026846013023.us-central1.run.app/mcp",
-    "headers": {
-      "Authorization": "Bearer ${user_config.api_key}"
-    }
+    "url": "https://foresee-mcp-1026846013023.us-central1.run.app/mcp"
   }
 }

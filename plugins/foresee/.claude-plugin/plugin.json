@@ -17,14 +17,5 @@
     "rate-comparison",
     "personal-finance"
   ],
-  "defaultEnabled": false,
-  "userConfig": {
-    "api_key": {
-      "type": "string",
-      "title": "API key",
-      "description": "Your Foresee API key.",
-      "required": true,
-      "sensitive": true
-    }
-  }
+  "defaultEnabled": false
 }
