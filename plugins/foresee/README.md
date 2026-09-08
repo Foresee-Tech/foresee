@@ -14,4 +14,4 @@ carriers.
 /plugin install foresee@foresee
 ```
 
-On enable, Claude prompts for an API key.
+Enable it and start asking — no API key or sign-up required.

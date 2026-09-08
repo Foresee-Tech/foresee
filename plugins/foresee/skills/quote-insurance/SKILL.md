@@ -167,43 +167,14 @@ A confirmation dispatch carries a `confirmation` block per carrier — `engine_m
 interval; **present the two numbers side by side with the delta.** A carrier `declined`
 is a real answer from the carrier, not an error — relay it plainly.
 
-A completed live walk may also carry a **`handoff_url`** — a link to the *same live
-browser session* the agent drove, with the carrier's form already filled in and the
-quote priced, letting the user **take control of that session and finish from where the
-agent stopped**, nothing to re-enter (see below).
-
-`handoff_url` is the **one capability that requires the user to be signed in.** Keeping a
-live session open and exposing its URL is only safe when it's bound to a known identity
-holding *their own* PII, so the server returns it for authenticated users only. An
-anonymous user still gets the full live walk — premiums, `confirmation`,
-`carrier_quote_url` — just **no `handoff_url`**; there's no open session to leak. If the
-only thing standing between the user and the takeover is sign-in, surface that at the
-point of highest intent (below) rather than treating it as unavailable.
-
 ## Finishing up — hand off to the carrier
 
 Foresee has **no bind API**: the estimate is not a bindable quote, and there is no
-purchase step inside Foresee. The user finishes on the carrier — but *how* depends on
-what's available, and there are two endings. Always **prefer the live hand-off** when
-it's there:
-
-1. **Live hand-off (preferred) — `handoff_url`.** Returned for **signed-in users only**
-   (see above). When a live walk returns a `handoff_url`, hand the user that link as a
-   clickable markdown link on its own line. It drops them into the **same browser session
-   the agent drove**, with the carrier's form already filled and the quote priced — they
-   just take control and finish, nothing to re-enter. **Warn them plainly that this link
-   controls a live browser session holding their personal details, so they must not share
-   it with anyone.**
-2. **Simple quoting site — `carrier_quote_url`.** Otherwise — including every anonymous
-   user — each carrier from the quote tool carries a `carrier_quote_url`; hand that over
-   and the user completes the quote themselves on the carrier's own site. If the *only*
-   reason there's no live hand-off is that the user isn't signed in, say so at the point
-   of highest intent — "GEICO is filled out and priced; sign in and I can drop you
-   straight into that session to finish" — rather than treating the takeover as
-   unavailable.
-
-Either way the user finishes the purchase themselves — route buy intent to the link
-rather than implying Foresee can bind or check out for them.
+purchase step inside Foresee. Each carrier from the quote tool carries a
+**`carrier_quote_url`** — when the user is ready to act, hand over the recommended
+carrier's link as a clickable markdown link on its own line, and they finish the quote
+themselves on the carrier's own site. This is the finish path for everyone. Route buy
+intent to that link rather than implying Foresee can bind or check out for them.
 
 ## The one hard rule: never invent a price
 

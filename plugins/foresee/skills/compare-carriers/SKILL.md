@@ -95,9 +95,7 @@ keeps "every number is validated" true.
 - USAA is military-affiliated only — flag that if it appears and the user isn't
   eligible.
 - The instant quote is a filing-based estimate, **not a bindable quote**; when the user
-  wants to buy, hand off to the carrier. Prefer a live walk's `handoff_url` when present
-  (signed-in users only — it drops them into the already-filled browser session; warn
-  them not to share the link, it holds their details); otherwise use the carrier's
-  `carrier_quote_url`. See the `quote-insurance` skill for the full hand-off detail.
+  wants to buy, hand off to the carrier with its `carrier_quote_url`. See the
+  `quote-insurance` skill for the full hand-off detail.
 - If the user's state isn't covered, the tool returns a clear "no coverage yet"
   error — relay it plainly rather than guessing.
