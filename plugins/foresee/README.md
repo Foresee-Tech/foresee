@@ -14,4 +14,5 @@ carriers.
 /plugin install foresee@foresee
 ```
 
-Enable it and start asking — no API key or sign-up required.
+Enable it and start asking — no API key required. Instant quotes work anonymously; the
+live carrier-confirmation tools require signing in.

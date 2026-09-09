@@ -88,8 +88,7 @@ of uncertainty below) — so you can still give a point estimate and then offer 
      (NAIC complaint index). Read it alongside the top-level `trust_methodology`:
      complaint indexes are relative, so compare carriers to each other, not to 1.0.
 4. Read the top-level **`assumptions`**, **`tighten_by`**, **`failures`**, and
-   **`disclaimer`** and act on them (below). `quote_history` (`list` / `compare`) recalls
-   a signed-in user's past quotes and diffs two `request_id`s if they ask "what changed".
+   **`disclaimer`** and act on them (below).
 
 ## The two kinds of uncertainty — keep them separate
 
@@ -134,10 +133,11 @@ never a widened CI.
 
 When the user wants firm, proven numbers (or is ready to buy), Foresee agents complete
 the carriers' real quote flows with the user's **real** details and read back the page
-premium. These live walks run for **anyone — no Foresee sign-in required** — but they
-submit real PII to carriers, so run them only on the user's own real profile, never on a
-hypothetical or third-person profile (hypotheticals get instant quotes). Two entry
-points:
+premium. These live walks require a **signed-in Foresee identity**: an anonymous caller
+gets a structured `sign_in_required` — relay it and have the user connect signed in
+before retrying. They submit real PII to carriers, so run them only on the user's own
+real profile, never on a hypothetical or third-person profile (hypotheticals get instant
+quotes). Two entry points:
 
 - **`confirm_quotes_live`** — the validation run. It dispatches agents for the
   carrier+state pairs with a production-marked walk, snapshots the instant engine quote,
