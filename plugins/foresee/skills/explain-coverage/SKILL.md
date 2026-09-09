@@ -20,7 +20,7 @@ their price.
 
 1. If the question is state- or carrier-specific, ground it with
    **`auto_insurance_quote_profile`** — its response carries the carriers actually
-   priced for that state, each carrier's `cells` breakdown and `price_ladder`, and
+   priced for that state, each carrier's per-line `coverages` breakdown and `price_ladder`, and
    (where loaded) `coverage_options` (the filed limit/deductible rungs). There is no
    separate coverage/serviceability tool; an uncovered state returns a clear error.
 2. Explain the concepts the user asked about:
@@ -29,10 +29,11 @@ their price.
    - **Collision** and **Comprehensive** — with **deductibles** (what you pay before
      coverage kicks in; higher deductible → lower premium).
    - **UM/UIM, PIP** and other lines as they come up.
-3. When a quote is in play, ground it in that user's real numbers: the `cells`
-   breakdown shows good/better/best tiers (`minimum` / `standard` / `premium`), and
-   within each, every coverage line's own premium and its selected limit/deductible —
-   so "what am I paying for collision?" has a concrete answer, not just a definition.
+3. When a quote is in play, ground it in that user's real numbers: the quote is priced
+   at their explicit `coverage_selection` (there are no named tiers — only limits and
+   deductibles the user chose), and its `coverages` breakdown carries every coverage
+   line's own premium and its selected limit/deductible — so "what am I paying for
+   collision?" has a concrete answer, not just a definition.
 
 ## The coverage ladder — where the money moves
 

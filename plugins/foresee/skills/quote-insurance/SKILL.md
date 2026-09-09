@@ -64,10 +64,13 @@ of uncertainty below) — so you can still give a point estimate and then offer 
    ("just ballpark for a 30-year-old in Austin"), proceed with what you have. Ask at
    most **one** round of 2–4 short high-impact questions, then call once.
 2. Call **`auto_insurance_quote_profile`** with a `profile` dict, using the schema's
-   exact field names (`zip_code`, `vehicle_year`, `accidents_3yr`, …). This is the
-   primary tool: one exact rate-engine run per carrier — fast, deterministic, and
-   `source: deterministic_serff` (filing-based). Prefer it over the range/recommend
-   tools.
+   exact field names (`zip_code`, `vehicle_year`, `accidents_3yr`, …), **and a
+   `coverage_selection`** — it is required, as actual numbers (e.g. `{"bi": "100/300",
+   "pd": 100, "coll_deductible": 500, "comp_deductible": 500}`). Ask the user for
+   their choice; never invent one, and never describe coverage as named tiers — there
+   are none, only explicit limits and deductibles. This is the primary tool: one exact
+   rate-engine run per carrier — fast, deterministic, and `source: deterministic_serff`
+   (filing-based).
 3. Read off, per carrier:
    - **`monthly`** — the headline point estimate. Each carrier also carries
      `entity_name` (the actual writing company) and `carrier_quote_url` (where the
@@ -76,10 +79,11 @@ of uncertainty below) — so you can still give a point estimate and then offer 
      `{confidence: "unmeasured"}` / `"structural-only"` when validation data is thin.
      This is what we genuinely *can't* resolve right now (see below); state it as
      confidence, not a hedge.
-   - **`cells`** — good/better/best tiers (`minimum`, `standard`, `premium`), each with
-     its own `monthly`, `semiannual_total`, `annual_total`, and a per-line `coverages`
-     breakdown (BI/PD, collision, comprehensive, fees…) carrying the selected limit and
-     each rating `step`. Use it for "what am I paying for" and for 6-month/annual totals.
+   - **`quote`** — the carrier's full quote *at your selection* (echoed back as
+     `coverage_selection`): `semiannual_total` / `annual_total` and a per-line
+     `coverages` breakdown (BI/PD, collision, comprehensive, fees…) carrying each
+     line's own premium, its selected limit/deductible, and its rating `steps`. Use it
+     for "what am I paying for" and for 6-month/annual totals.
    - **`price_ladder`** — for each lever (BI limit, PD limit, collision/comprehensive
      deductible) the exact filed monthly at **every** rung, one lever moved at a time.
      This is how you answer "what would a $1000 deductible cost" — read the number off
@@ -178,8 +182,8 @@ intent to that link rather than implying Foresee can bind or check out for them.
 
 ## The one hard rule: never invent a price
 
-Only ever quote a number Foresee returned. Every `monthly`, every `cells` figure, and
-every `price_ladder` rung **is** an exact re-rate — use those freely. But **do not**
+Only ever quote a number Foresee returned. Every `monthly`, every coverage-line figure,
+and every `price_ladder` rung **is** an exact re-rate — use those freely. But **do not**
 multiply the `steps` factors yourself, do not interpolate a limit/deductible or a
 combination we didn't price, and do not average carriers into a made-up figure. If the
 user wants a coverage level, combination, or carrier we didn't return, pass a
