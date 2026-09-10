@@ -35,6 +35,17 @@ ChatGPT connects to remote MCP servers through **Developer Mode** (available on 
    - **Authentication:** None
 3. Save. Foresee's tools now appear in chat.
 
+### Portable plugin (ChatGPT & Codex plugins, Hermes Agent, others)
+
+`plugins/foresee/` is also a portable [Agent Plugin](https://agent-plugins.org) — `plugin.json` + `mcp.json` + `skills/` — so hosts that take that format get the MCP server and the skills together. Hosts that only take an MCP server (Hermes Agent, for example) use the endpoint directly:
+
+```yaml
+# ~/.hermes/config.yaml
+mcp_servers:
+  foresee:
+    url: "https://mcp.go-foresee.com/mcp"
+```
+
 ### Any MCP client
 
 Foresee is a standard streamable-HTTP MCP server, so it works with any MCP-compatible client (VS Code, Windsurf, Zed, Cline, custom agents, etc.). Add this to your client's MCP config:
