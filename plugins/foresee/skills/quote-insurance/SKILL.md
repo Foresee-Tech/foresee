@@ -62,14 +62,18 @@ of uncertainty below) — so you can still give a point estimate and then offer 
 
 ## How to run it
 
-1. Confirm at least **state/ZIP** and ideally age + vehicle. If the user is vague
-   ("just ballpark for a 30-year-old in Austin"), proceed with what you have. Ask at
-   most **one** round of 2–4 short high-impact questions, then call once.
+1. If the user has given almost all the high-impact details — location, age, vehicle,
+   driving history — call in your **first reply**; don't ask questions you have
+   answers to. If the user is vague ("just ballpark for a 30-year-old in Austin"),
+   still proceed with what you have. Only when most of those details are missing, ask
+   at most **one** round of 2–4 short high-impact questions, then call once.
 2. Call **`auto_insurance_quote_profile`** with a `profile` dict, using the schema's
    exact field names (`zip_code`, `vehicle_year`, `accidents_3yr`, …), **and a
-   `coverage_selection`** — it is required, as actual numbers (e.g. `{"bi": "100/300",
-   "pd": 100, "coll_deductible": 500, "comp_deductible": 500}`). Ask the user for
-   their choice; never invent one, and never describe coverage as named tiers — there
+   `coverage_selection`** — it is required, as actual numbers: the user's limits if
+   they stated any, else the common starting point (`{"bi": "100/300",
+   "pd": 100, "coll_deductible": 500, "comp_deductible": 500}`) on the first call,
+   presented with the prices as a declared assumption the user can adjust — price
+   first, don't ask first. Never describe coverage as named tiers — there
    are none, only explicit limits and deductibles. This is the primary tool: one exact
    rate-engine run per carrier — fast, deterministic, and `source: deterministic_serff`
    (filing-based).
