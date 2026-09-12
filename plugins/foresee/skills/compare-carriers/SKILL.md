@@ -31,16 +31,16 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
    `coverage_options`. There is no separate serviceability tool: the quote tool
    self-gates on state (an uncovered state returns a clear error naming the live states)
    and its response carries top-level `assumptions`, `tighten_by`, and `failures`.
-4. If the response includes **`dispatched_agents`**, more carriers are being quoted live
-   by Foresee agents completing the carriers' own quote flows. Mention them, and after a
-   minute or two call **`check_agent_quotes`** with the `dispatch_id` to fold the results
-   into the comparison — call out anything now cheaper than the previous best. An agent
-   may report a carrier `declined`; that's a real answer, relay it.
-5. When the user wants proven numbers or is ready to buy, offer a live confirmation:
-   **`confirm_quotes_live`** drives the carrier's real site and compares the page premium
-   against the engine estimate (collect the `confirmation` block via `check_agent_quotes`).
-   This requires consent — see the `quote-insurance` skill for the exact disclosure and
-   the verbatim `user_authorization` requirement.
+4. When the user wants proven numbers or is ready to buy, offer live quotes:
+   **`live_carrier_quotes`** drives the carriers' real sites and reads back the
+   page-printed premium; where an engine baseline exists the results carry a
+   `confirmation` block comparing it against the engine estimate. The tool is
+   idempotent — re-call it with the same arguments to collect progress and results,
+   and an already-walked profile returns its existing results without re-submitting.
+   Commissioning requires consent — see the `quote-insurance` skill for the exact
+   disclosure and the verbatim `user_authorization` requirement. Fold completed
+   quotes into the comparison and call out anything now cheaper than the previous
+   best; a carrier `declined` is a real answer, relay it.
 
 ## Presenting results
 

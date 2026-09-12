@@ -27,11 +27,11 @@ Foresee is a two-part system, and the trust comes from how they fit together:
    carrier's *filed rate manual* against the profile and returns an exact computed
    premium per carrier — with a full sub-coverage breakdown and a price ladder — in one
    call. This is the headline answer and the default path.
-2. **Live carrier agents (confirmation).** Foresee agents drive the carriers' own
-   quoting websites with the quoted details and read back the page-printed premium.
-   Their job is to **confirm the engine**: `confirm_quotes_live` compares the live number
-   against the engine's estimate so the user sees the instant quote *and* proof it holds
-   up on the carrier's site.
+2. **Live carrier agents.** Foresee agents drive the carriers' own quoting websites
+   with the quoted details and read back the page-printed premium — one tool,
+   `live_carrier_quotes`. Where an engine baseline exists, the results carry a
+   `confirmation` block comparing the two, so the user sees the instant quote *and*
+   proof it holds up on the carrier's site.
 
 Lead with part 1; offer part 2 when the user is ready to act on real numbers.
 
@@ -130,43 +130,44 @@ never a widened CI.
 - Offer the `price_ladder` / sub-coverage detail or a coverage change (see
   `explain-coverage` / `compare-carriers`) if the user wants to go deeper.
 
-## Confirming against the carrier — live agents
+## Live quotes from the carrier's own site — agents
 
 When the user wants firm, proven numbers (or is ready to buy), Foresee agents complete
 the carriers' real quote flows and read back the page premium. Hypothetical or synthetic
 profiles are fine: someone exploring "what would a driver like this pay" can fan out
 live agents just like someone quoting their own details. When the details ARE the
 user's real PII, the consent disclosure below is what makes the submission theirs to
-authorize. Two entry points:
+authorize. One tool:
 
-- **`confirm_quotes_live`** — the validation run. It dispatches agents for the
-  carrier+state pairs with a production-marked walk, snapshots the instant engine quote,
-  and compares the carrier's page-printed premium against it. This is "the CUA confirms
-  the engine."
-- **`request_live_carrier_quotes`** — fan out agents to quote the profile live: the
-  user's own details when they're moving toward buying, or a hypothetical they want
-  real page-printed numbers for.
+- **`live_carrier_quotes`** — IDEMPOTENT, keyed on profile + coverage selection. The
+  first call commissions the walks; calling again with the SAME arguments collects
+  progress and results instead of re-submitting. A profile that has already been walked
+  returns those results — the carriers are never asked twice. Its tool description
+  states whether this session is signed in (the `AUTH STATUS` line); when it isn't,
+  the tool refuses with `sign_in_required`, so route the user to sign in first rather
+  than calling.
 
-Both require consent, every time:
+Commissioning requires consent:
 
-1. **Before calling, tell the user plainly**: Foresee will submit their details to the
-   named carriers; the carriers may pull their credit report and driving record (a soft
-   pull — no credit-score impact); and the carriers may contact them by email or phone.
+1. **Before the first call, tell the user plainly**: Foresee will submit their details
+   to the named carriers; the carriers may pull their credit report and driving record
+   (a soft pull — no credit-score impact); and the carriers may contact them by email
+   or phone.
 2. Get their explicit go-ahead and pass it **verbatim** as `user_authorization`
-   (e.g. "yes, go ahead"). The tools refuse to run without it.
+   (e.g. "yes, go ahead").
 3. `identity` may be omitted for a signed-in user with a saved profile; otherwise collect
    the identity fields in chat. A `missing_facts` response is normal — carrier forms
    insist on facts Foresee won't invent (body style, purchase date, age first
    licensed…); ask the user for exactly the `needs` listed and call again.
 
-Collect results with **`check_agent_quotes`** using the returned `dispatch_id` (also the
-`dispatch_id` on any `dispatched_agents` in a quote). Call it after a minute or two;
-agents still working report their stage, so it's safe to check early and again. Fold
-completed quotes into the table and call out anything now cheaper than the previous best.
-A confirmation dispatch carries a `confirmation` block per carrier — `engine_monthly` vs
-`observed_monthly`, the delta, and whether the live number fell inside the engine's
-interval; **present the two numbers side by side with the delta.** A carrier `declined`
-is a real answer from the carrier, not an error — relay it plainly.
+Collect results by re-calling `live_carrier_quotes` with the same arguments after a
+minute or two; agents still working report their stage, so it's safe to check early and
+again. Fold completed quotes into the table and call out anything now cheaper than the
+previous best. An envelope with an engine baseline carries a `confirmation` block per
+carrier — `engine_monthly` vs `observed_monthly`, the delta, and whether the live number
+fell inside the engine's interval; **present the two numbers side by side with the
+delta.** A carrier `declined` is a real answer from the carrier, not an error — relay
+it plainly.
 
 ## Finishing up — hand off to the carrier
 
