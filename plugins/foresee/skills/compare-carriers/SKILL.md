@@ -23,9 +23,11 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
    keys like `geico`, `progressive`, `statefarm`, `allstate`, `mercury`, `kemper`,
    `csaa`, `farmers`, `usaa`). Otherwise omit it to compare everything available in
    that state.
-3. Call **`auto_insurance_quote_profile`** for the point estimate per carrier. Each
-   carrier comes back with `monthly`, a `confidence_interval`, a `cells` breakdown
-   (good/better/best tiers, each with `monthly` + `semiannual_total` + `annual_total`),
+3. Call **`auto_insurance_quote_profile`** for the point estimate per carrier, with the
+   user's explicit `coverage_selection` (required — actual numbers, never invented; see
+   the `quote-insurance` skill). Each carrier comes back with `monthly`, a
+   `confidence_interval`, a per-line `coverages` breakdown at that selection (with
+   `semiannual_total` + `annual_total`),
    a `price_ladder` (exact filed monthly at every rung of each lever), a `trust` block
    (`verdict` + NAIC complaint index), `carrier_quote_url`, and (where loaded)
    `coverage_options`. There is no separate serviceability tool: the quote tool
@@ -81,10 +83,10 @@ wants to trade coverage for price.
 
 ## The one hard rule: never invent a price
 
-Rank, filter, and pivot only over numbers Foresee returned — every `monthly`, `cells`,
-and `price_ladder` value IS an exact re-rate. **Do not** compute a premium by
-multiplying `steps` factors, interpolate a deductible we didn't price, or synthesize a
-carrier's number from another's. If you want a cell we didn't return (another carrier,
+Rank, filter, and pivot only over numbers Foresee returned — every `monthly`,
+coverage-line, and `price_ladder` value IS an exact re-rate. **Do not** compute a
+premium by multiplying `steps` factors, interpolate a deductible we didn't price, or
+synthesize a carrier's number from another's. If you want a number we didn't return (another carrier,
 another coverage selection), call the tool again — the server prices it. This is what
 keeps "every number is validated" true.
 

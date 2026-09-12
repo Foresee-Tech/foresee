@@ -18,7 +18,8 @@ One-click setup — click a button and confirm:
 
 [![Add to Cursor](https://img.shields.io/badge/Add_to-Cursor-000000?style=for-the-badge&logo=cursor&logoColor=white)](https://cursor.com/install-mcp?name=foresee&config=eyJ0eXBlIjoiaHR0cCIsInVybCI6Imh0dHBzOi8vbWNwLmdvLWZvcmVzZWUuY29tL21jcCJ9)
 
-Everywhere else, point your client at the MCP endpoint — no API key or sign-up required:
+Everywhere else, point your client at the MCP endpoint — no API key required (instant
+quotes are anonymous; the live carrier-confirmation tools require signing in):
 
 ```
 https://mcp.go-foresee.com/mcp
