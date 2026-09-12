@@ -1,9 +1,11 @@
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "foresee",
   "version": "0.2.1",
   "description": "AI should shop for your home and auto insurance. Foresee returns quotes from every carrier as structured objects that agents can reason about.",
   "author": {
-    "name": "Foresee"
+    "name": "Foresee",
+    "url": "https://go-foresee.com"
   },
   "homepage": "https://github.com/Foresee-Tech/foresee",
   "repository": "https://github.com/Foresee-Tech/foresee",
@@ -16,6 +18,5 @@
     "rates",
     "rate-comparison",
     "personal-finance"
-  ],
-  "defaultEnabled": false
+  ]
 }

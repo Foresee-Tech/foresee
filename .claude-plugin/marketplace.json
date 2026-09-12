@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "foresee",
-      "description": "Insurance quote comparison for Claude. Get detailed quotes from every carrier - State Farm, Progressive, Allstate, GEICO, Liberty Mutual, etc - with full sub-coverage detail, and find the right structure for your situation. Auto is available today; home and other lines are coming soon.",
+      "description": "AI should shop for your home and auto insurance. Foresee returns quotes from every carrier as structured objects that agents can reason about.",
       "author": {
         "name": "Foresee"
       },
