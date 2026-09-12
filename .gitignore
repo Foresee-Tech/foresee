@@ -6,3 +6,7 @@
 # Node / tooling (none shipped, but keep clean)
 node_modules/
 .claude/
+
+# Local planning artifacts — do not publish
+integration-targets.csv
+
