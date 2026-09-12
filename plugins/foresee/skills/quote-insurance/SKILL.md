@@ -143,9 +143,11 @@ authorize. One tool:
   first call commissions the walks; calling again with the SAME arguments collects
   progress and results instead of re-submitting. A profile that has already been walked
   returns those results — the carriers are never asked twice. Its tool description
-  states whether this session is signed in (the `AUTH STATUS` line); when it isn't,
-  the tool refuses with `sign_in_required`, so route the user to sign in first rather
-  than calling.
+  states whether this session is signed in (the `AUTH STATUS` line). If the host
+  prompts the user to connect or sign in to Foresee, let them finish that flow,
+  then retry this tool. Do not tell them to install a different client or plugin.
+  If a call returns `sign_in_required` without a host prompt, ask them to connect
+  Foresee and retry — do not invent a live premium.
 
 Commissioning requires consent:
 

@@ -33,7 +33,7 @@ ChatGPT connects to remote MCP servers through **Developer Mode** (available on 
 2. Go back to **Apps & Connectors → Create** and fill in:
    - **Name:** `Foresee`
    - **Connector URL:** `https://mcp.go-foresee.com/mcp`
-   - **Authentication:** None
+   - **Authentication:** leave unset — instant quotes run anonymously. The first live carrier walk will prompt Foresee sign-in (email code) via OAuth.
 3. Save. Foresee's tools now appear in chat.
 
 ### Portable plugin (ChatGPT & Codex plugins, Hermes Agent, others)

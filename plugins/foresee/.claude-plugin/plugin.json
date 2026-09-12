@@ -1,11 +1,11 @@
 {
   "name": "foresee",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "AI should shop for your home and auto insurance. Foresee returns quotes from every carrier as structured objects that agents can reason about.",
   "author": {
-    "name": "Foresee"
+    "name": "Foresee Insurance Services, LLC"
   },
-  "homepage": "https://github.com/Foresee-Tech/foresee",
+  "homepage": "https://go-foresee.com",
   "repository": "https://github.com/Foresee-Tech/foresee",
   "license": "MIT",
   "keywords": [
