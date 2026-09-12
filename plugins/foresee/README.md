@@ -17,6 +17,9 @@ OAuth flow (email code) the first time you run it.
 /plugin install foresee@foresee
 ```
 
+Enable it and start asking — no API key required. Instant quotes work anonymously; the
+live carrier-confirmation tools require signing in.
+
 Or point any MCP client at:
 
 ```
