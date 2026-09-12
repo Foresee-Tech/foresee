@@ -28,7 +28,7 @@ Foresee is a two-part system, and the trust comes from how they fit together:
    premium per carrier — with a full sub-coverage breakdown and a price ladder — in one
    call. This is the headline answer and the default path.
 2. **Live carrier agents (confirmation).** Foresee agents drive the carriers' own
-   quoting websites with the user's real details and read back the page-printed premium.
+   quoting websites with the quoted details and read back the page-printed premium.
    Their job is to **confirm the engine**: `confirm_quotes_live` compares the live number
    against the engine's estimate so the user sees the instant quote *and* proof it holds
    up on the carrier's site.
@@ -133,18 +133,19 @@ never a widened CI.
 ## Confirming against the carrier — live agents
 
 When the user wants firm, proven numbers (or is ready to buy), Foresee agents complete
-the carriers' real quote flows with the user's **real** details and read back the page
-premium. These live walks run for **anyone — no Foresee sign-in required** — but they
-submit real PII to carriers, so run them only on the user's own real profile, never on a
-hypothetical or third-person profile (hypotheticals get instant quotes). Two entry
-points:
+the carriers' real quote flows and read back the page premium. Hypothetical or synthetic
+profiles are fine: someone exploring "what would a driver like this pay" can fan out
+live agents just like someone quoting their own details. When the details ARE the
+user's real PII, the consent disclosure below is what makes the submission theirs to
+authorize. Two entry points:
 
 - **`confirm_quotes_live`** — the validation run. It dispatches agents for the
   carrier+state pairs with a production-marked walk, snapshots the instant engine quote,
   and compares the carrier's page-printed premium against it. This is "the CUA confirms
   the engine."
-- **`request_live_carrier_quotes`** — fan out agents to quote the real profile live when
-  the user wants to move toward buying.
+- **`request_live_carrier_quotes`** — fan out agents to quote the profile live: the
+  user's own details when they're moving toward buying, or a hypothetical they want
+  real page-printed numbers for.
 
 Both require consent, every time:
 
