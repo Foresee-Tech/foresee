@@ -20,7 +20,7 @@ their price.
 ## How to run it
 
 1. If the question is state- or carrier-specific, ground it with
-   **`auto_insurance_quote_profile`**. Pass `coverage_selection` as
+   **`quote_insurance`**. Pass `coverage_selection` as
    actual numbers (user's limits, or the common `"100/300"` / `100` / `$500` /
    `$500` start). The response carries the carriers actually priced for that
    state, each carrier's sub-coverage `L` lines at that selection, and `D` /
@@ -46,7 +46,7 @@ Raise a deductible and the premium drops (you keep more risk); raise a limit and
   $500 / $1000), so the dollar trade-off for *their* profile and carrier is a direct
   read — "a $1000 collision deductible saves $X/mo for $500 more exposure per claim."
 - For a specific *combined* change (several levers at once), call
-  `auto_insurance_quote_profile` with a `coverage_selection`
+  `quote_insurance` with a `coverage_selection`
   (e.g. `{"coll_deductible": 1000}`) and compare the returned `monthly`.
 - Use the ladder's `D` rungs to show what a carrier actually files — don't offer
   a limit or deductible that isn't on their ladder.

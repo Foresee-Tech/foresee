@@ -24,7 +24,7 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
    keys like `geico`, `progressive`, `statefarm`, `allstate`, `mercury`, `kemper`,
    `csaa`, `farmers`, `usaa`). Otherwise omit it to compare everything available in
    that state.
-3. Call **`auto_insurance_quote_profile`** for the instant per-carrier estimate.
+3. Call **`quote_insurance`** for the instant per-carrier estimate.
    Pass **`coverage_selection`** as actual numbers (`bi`, `pd`,
    `coll_deductible`, `comp_deductible`). If the user didn't specify limits, pass
    the common starting point (`"100/300"`, `100`, `500`, `500`) on the first call
