@@ -55,9 +55,11 @@ ChatGPT connects to remote MCP servers through **Developer Mode** (available on 
    - **Authentication:** leave unset — instant quotes run anonymously. The first live carrier walk will prompt Foresee sign-in (email code) via OAuth.
 3. Save. Foresee's tools now appear in chat.
 
-### Portable plugin (ChatGPT & Codex plugins, Hermes Agent, others)
+### Portable plugin (ChatGPT & Codex plugins, others)
 
-`plugins/foresee/` is also a portable [Agent Plugin](https://agent-plugins.org) — `plugin.json` + `mcp.json` + `skills/` — so hosts that take that format get the MCP server and the skills together. Hosts that only take an MCP server (Hermes Agent, for example) use the endpoint directly:
+`plugins/foresee/` is also a portable [Agent Plugin](https://agent-plugins.org) — `plugin.json` + `mcp.json` + `skills/` — so hosts that take that format get the MCP server and the skills together.
+
+### Hermes Agent
 
 ```yaml
 # ~/.hermes/config.yaml
