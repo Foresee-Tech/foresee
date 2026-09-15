@@ -1,4 +1,5 @@
 ---
+# @copy skill.explain-coverage audience=agent
 name: explain-coverage
 description: This skill should be used when the user asks what auto-insurance coverage means or which limits/deductibles to choose — e.g. "what does 100/300 mean", "explain liability vs full coverage", "what deductible should I pick", "what coverage do I need in <state>", or wants to understand how changing a limit or deductible changes the price.
 version: 0.4.0

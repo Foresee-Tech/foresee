@@ -1,3 +1,4 @@
+<!-- @copy readme audience=human -->
 <img src="assets/logo.svg" alt="Foresee" width="72">
 
 # Foresee

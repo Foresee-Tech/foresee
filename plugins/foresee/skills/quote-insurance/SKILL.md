@@ -1,4 +1,5 @@
 ---
+# @copy skill.quote-insurance audience=agent
 name: quote-insurance
 description: This skill should be used when the user wants a personal lines (especially home and auto) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my auto insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle details and asks for a price. Gathers the minimum profile conversationally and returns carrier quotes.
 version: 0.4.0
