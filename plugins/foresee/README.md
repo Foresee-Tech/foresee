@@ -1,3 +1,4 @@
+<!-- @copy plugin.readme audience=human -->
 # Foresee
 
 Insurance quote estimates for ChatGPT, Codex, Claude, and any MCP client. Ask

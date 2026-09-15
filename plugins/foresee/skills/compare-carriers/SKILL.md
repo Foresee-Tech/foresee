@@ -1,4 +1,5 @@
 ---
+# @copy skill.compare-carriers audience=agent
 name: compare-carriers
 description: This skill should be used when the user wants to compare auto-insurance carriers or shop around — e.g. "compare car insurance companies", "who is cheapest for me", "is GEICO or Progressive cheaper", "should I switch from State Farm", or asks which carrier to pick. Ranks per-carrier point estimates and reasons about the coverage ladder across carriers.
 version: 0.4.0
