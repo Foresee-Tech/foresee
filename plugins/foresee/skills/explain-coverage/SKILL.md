@@ -20,21 +20,21 @@ their price.
 ## How to run it
 
 1. If the question is state- or carrier-specific, ground it with
-   **`auto_insurance_quote_profile`** — its response carries the carriers actually
-   priced for that state, each carrier's per-line `coverages` breakdown and `price_ladder`, and
-   (where loaded) `coverage_options` (the filed limit/deductible rungs). There is no
-   separate coverage/serviceability tool; an uncovered state returns a clear error.
+   **`auto_insurance_quote_profile`**. Pass `coverage_selection` as
+   actual numbers (user's limits, or the common `"100/300"` / `100` / `$500` /
+   `$500` start). The response carries the carriers actually priced for that
+   state, each carrier's sub-coverage `L` lines at that selection, and `D` /
+   `price_ladder` rungs for every other filed limit/deductible. An uncovered
+   state returns a clear error.
 2. Explain the concepts the user asked about:
    - **Liability (BI/PD)** — e.g. `100/300/100` = $100k per person / $300k per
      accident bodily injury, $100k property damage.
    - **Collision** and **Comprehensive** — with **deductibles** (what you pay before
      coverage kicks in; higher deductible → lower premium).
    - **UM/UIM, PIP** and other lines as they come up.
-3. When a quote is in play, ground it in that user's real numbers: the quote is priced
-   at their explicit `coverage_selection` (there are no named tiers — only limits and
-   deductibles the user chose), and its `coverages` breakdown carries every coverage
-   line's own premium and its selected limit/deductible — so "what am I paying for
-   collision?" has a concrete answer, not just a definition.
+3. When a quote is in play, ground it in that user's real numbers: the `L` lines
+   show every coverage's own monthly at the selection you passed — so "what am I
+   paying for collision?" has a concrete answer, not just a definition.
 
 ## The coverage ladder — where the money moves
 
@@ -49,8 +49,8 @@ premium drops (you keep more risk); raise a limit and it rises (you offload more
 - For a specific *combined* change (several levers at once), call
   `auto_insurance_quote_profile` with a `coverage_selection`
   (e.g. `{"coll_deductible": 1000}`) and compare the returned `monthly`.
-- Use `coverage_options` / the ladder's rungs to show what a carrier actually files —
-  don't offer a limit or deductible that isn't on their ladder.
+- Use the ladder's `D` rungs to show what a carrier actually files — don't offer
+  a limit or deductible that isn't on their ladder.
 - Different carriers file different ladders, and the best carrier can change with the
   rung — if the user is optimizing a specific coverage level, hand off to
   `compare-carriers`.

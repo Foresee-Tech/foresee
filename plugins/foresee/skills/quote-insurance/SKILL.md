@@ -63,34 +63,42 @@ of uncertainty below) — so you can still give a point estimate and then offer 
 
 1. Confirm at least **state/ZIP** and ideally age + vehicle. If the user is vague
    ("just ballpark for a 30-year-old in Austin"), proceed with what you have. Ask at
-   most **one** round of 2–4 short high-impact questions, then call once.
+   most **one** round of 2–4 short high-impact questions, then call once. When the
+   user has already given almost all of ZIP, age, vehicle, and driving history,
+   call in the first reply — price first, don't ask first.
 2. Call **`auto_insurance_quote_profile`** with a `profile` dict, using the schema's
    exact field names (`zip_code`, `vehicle_year`, `accidents_3yr`, …). This is the
-   primary tool: one exact rate-engine run per carrier — fast, deterministic, and
-   `source: deterministic_serff` (filing-based). Prefer it over the range/recommend
-   tools.
-3. Read off, per carrier:
-   - **`monthly`** — the headline point estimate. Each carrier also carries
-     `entity_name` (the actual writing company) and `carrier_quote_url` (where the
-     user finishes — see purchase, below).
+   instant rate-engine tool: one exact filing-based run per carrier. Pass
+   **`coverage_selection`** as actual numbers on four axes — `bi` (e.g. `"100/300"`),
+   `pd` (e.g. `100`), `coll_deductible` (e.g. `500`), `comp_deductible` (e.g. `500`).
+   If the user stated limits or deductibles, use them; otherwise pass that common
+   starting point on the **first** call and declare it as an adjustable assumption.
+   Set `perspective="self"` when the profile is the signed-in user's own; leave it
+   `"hypothetical"` for what-ifs.
+3. The content channel is compact machine text (not JSON): a `Q` header, then `C`
+   carrier rows, `L` sub-coverage lines, `F` rating factors, and `D` lever deltas.
+   Structured headlines still carry `monthly`, `confidence_interval`,
+   `trust_verdict`, and `carrier_quote_url`. Read off, per carrier:
+   - **`monthly`** — the headline point estimate, priced at the selection you
+     passed. The `C` row also names the writing company; `carrier_quote_url` is
+     where the user finishes (see purchase, below).
    - **`confidence_interval`** — `{low, high, confidence, basis}` when measured, or
      `{confidence: "unmeasured"}` / `"structural-only"` when validation data is thin.
      This is what we genuinely *can't* resolve right now (see below); state it as
      confidence, not a hedge.
-   - **`cells`** — good/better/best tiers (`minimum`, `standard`, `premium`), each with
-     its own `monthly`, `semiannual_total`, `annual_total`, and a per-line `coverages`
-     breakdown (BI/PD, collision, comprehensive, fees…) carrying the selected limit and
-     each rating `step`. Use it for "what am I paying for" and for 6-month/annual totals.
-   - **`price_ladder`** — for each lever (BI limit, PD limit, collision/comprehensive
-     deductible) the exact filed monthly at **every** rung, one lever moved at a time.
-     This is how you answer "what would a $1000 deductible cost" — read the number off
-     the ladder; never interpolate.
-   - **`trust`** — `verdict` (solid / caution / unverified) plus a `complaint_record`
-     (NAIC complaint index). Read it alongside the top-level `trust_methodology`:
-     complaint indexes are relative, so compare carriers to each other, not to 1.0.
-4. Read the top-level **`assumptions`**, **`tighten_by`**, **`failures`**, and
-   **`disclaimer`** and act on them (below). `quote_history` (`list` / `compare`) recalls
-   a signed-in user's past quotes and diffs two `request_id`s if they ask "what changed".
+   - **Sub-coverage lines (`L`)** — monthly dollars per line (BI/PD, collision,
+     comprehensive, UM…) at the selection you passed. Use these for "what am I
+     paying for" and for 6-month/annual totals (`monthly × 6` / `× 12`).
+   - **`price_ladder` / `D` rows** — for each lever (BI limit, PD limit,
+     collision/comprehensive deductible) the exact filed monthly at **every**
+     rung, one lever moved at a time (`new monthly = monthly + D delta`). This
+     is how you answer "what would a $1000 deductible cost" — read the number
+     off the ladder; never interpolate. If a rung is missing for a carrier,
+     that filing has no such option.
+   - **`trust`** — `verdict` (solid / caution / unverified). Compare carriers to
+     each other, not to an absolute index.
+4. Read the top-level **`assumptions`**, **`tighten_by`**, and **`failures`** and
+   act on them (below).
 
 ## The two kinds of uncertainty — keep them separate
 
@@ -125,9 +133,9 @@ never a widened CI.
   I can narrow that."
 - Surface `failures` (e.g. USAA when the user isn't military-affiliated) rather than
   silently dropping carriers.
-- The instant quote is a filing-based estimate, **not a bindable quote** (relay the
-  top-level `disclaimer` when it matters). End on the next concrete action — usually the
-  recommended carrier's quoting-portal link, or an offer to confirm live (below).
+- The instant quote is a filing-based estimate, **not a bindable quote**. End on the
+  next concrete action — usually the recommended carrier's quoting-portal link, or
+  an offer to confirm live (below).
 - Offer the `price_ladder` / sub-coverage detail or a coverage change (see
   `explain-coverage` / `compare-carriers`) if the user wants to go deeper.
 
@@ -138,17 +146,21 @@ the carriers' real quote flows and read back the page premium. Hypothetical or s
 profiles are fine: someone exploring "what would a driver like this pay" can fan out
 live agents just like someone quoting their own details. When the details ARE the
 user's real PII, the consent disclosure below is what makes the submission theirs to
-authorize. One tool:
+authorize.
 
-- **`live_carrier_quotes`** — IDEMPOTENT, keyed on profile + coverage selection. The
-  first call commissions the walks; calling again with the SAME arguments collects
-  progress and results instead of re-submitting. A profile that has already been walked
-  returns those results — the carriers are never asked twice. Its tool description
-  states whether this session is signed in (the `AUTH STATUS` line). If the host
-  prompts the user to connect or sign in to Foresee, let them finish that flow,
-  then retry this tool. Do not tell them to install a different client or plugin.
-  If a call returns `sign_in_required` without a host prompt, ask them to connect
-  Foresee and retry — do not invent a live premium.
+- **`live_carrier_quotes`** — the live-walk tool. IDEMPOTENT, keyed on profile +
+  coverage selection.
+  `coverage_selection` is required here too (same four axes as the instant tool).
+  The first call commissions the walks; calling again with the SAME arguments
+  collects progress and results instead of re-submitting. A profile that has
+  already been walked returns those results — the carriers are never asked twice.
+  The user must be signed in (OAuth); an anonymous call returns `sign_in_required`.
+  Its tool description states whether this session is signed in (the `AUTH STATUS`
+  line). If the host prompts the user to connect or sign in to Foresee, let them
+  finish that flow, then retry this tool. Do not tell them to install a different
+  client or plugin. If a call returns `sign_in_required` without a host prompt,
+  ask them to connect Foresee in their client's connector settings and retry —
+  do not invent a live premium.
 
 Commissioning requires consent:
 
@@ -183,14 +195,13 @@ intent to that link rather than implying Foresee can bind or check out for them.
 
 ## The one hard rule: never invent a price
 
-Only ever quote a number Foresee returned. Every `monthly`, every `cells` figure, and
-every `price_ladder` rung **is** an exact re-rate — use those freely. But **do not**
-multiply the `steps` factors yourself, do not interpolate a limit/deductible or a
-combination we didn't price, and do not average carriers into a made-up figure. If the
-user wants a coverage level, combination, or carrier we didn't return, pass a
-`coverage_selection` (snapped to each carrier's filed rung, recorded in `snapped_to`)
-and call the tool again. Every dollar you show must be one the engine computed — that is
-what lets us stand behind it.
+Only ever quote a number Foresee returned. Every `monthly`, every `L` line, and
+every `price_ladder` / `D` rung **is** an exact re-rate — use those freely. But
+**do not** multiply the `F` factors yourself, do not interpolate a limit/deductible
+or a combination we didn't price, and do not average carriers into a made-up figure.
+If the user wants a coverage combination or carrier we didn't return, pass a new
+`coverage_selection` and call the tool again. Every dollar you show must be one the
+engine computed — that is what lets us stand behind it.
 
 ## Unsupported states
 
