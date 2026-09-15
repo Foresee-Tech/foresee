@@ -24,7 +24,7 @@ their price.
    actual numbers (user's limits, or the common `"100/300"` / `100` / `$500` /
    `$500` start). The response carries the carriers actually priced for that
    state, each carrier's sub-coverage `L` lines at that selection, and `D` /
-   `price_ladder` rungs for every other filed limit/deductible. An uncovered
+   `price_ladder` rungs for every other limit/deductible. An uncovered
    state returns a clear error.
 2. Explain the concepts the user asked about:
    - **Liability (BI/PD)** — e.g. `100/300/100` = $100k per person / $300k per
@@ -38,12 +38,11 @@ their price.
 
 ## The coverage ladder — where the money moves
 
-The single most useful thing to teach: **coverage is a ladder, and moving a rung
-changes both what you're covered for and what you pay.** Raise a deductible and the
-premium drops (you keep more risk); raise a limit and it rises (you offload more).
+**Coverage is a ladder, and moving a rung changes both what you're covered for and what you pay.** 
+Raise a deductible and the premium drops (you keep more risk); raise a limit and it rises (you offload more).
 
 - Show the delta, don't just assert it. Each carrier's **`price_ladder`** already gives
-  the exact monthly at every filed rung of a lever (e.g. collision deductible at $250 /
+  the exact monthly at every rung of a lever (e.g. collision deductible at $250 /
   $500 / $1000), so the dollar trade-off for *their* profile and carrier is a direct
   read — "a $1000 collision deductible saves $X/mo for $500 more exposure per claim."
 - For a specific *combined* change (several levers at once), call
