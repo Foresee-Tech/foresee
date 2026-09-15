@@ -9,8 +9,6 @@ AI should buy your home and auto insurance. Foresee returns accurate quotes from
 *"Do I need a high deductible? Which insurer is best for premium coverage?"*
 *"Am I eligible for any group discounts?"*
 
-> **Foresee is currently only live with California auto insurance - more states and lines coming soon.** 
-
 ## Install
 
 One-click setup — click a button and confirm:
@@ -19,8 +17,11 @@ One-click setup — click a button and confirm:
 
 [![Add to Cursor](https://img.shields.io/badge/Add_to-Cursor-000000?style=for-the-badge&logo=cursor&logoColor=white)](https://cursor.com/install-mcp?name=foresee&config=eyJ0eXBlIjoiaHR0cCIsInVybCI6Imh0dHBzOi8vbWNwLmdvLWZvcmVzZWUuY29tL21jcCJ9)
 
-Everywhere else, point your client at the MCP endpoint — no API key required (instant
-quotes are anonymous; the live carrier-confirmation tools require signing in):
+[![Add to VS Code](https://img.shields.io/badge/Add_to-VS_Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)](https://vscode.dev/redirect/mcp/install?name=foresee&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.go-foresee.com%2Fmcp%22%7D)
+
+[![Add to Hermes](https://img.shields.io/badge/Add_to-Hermes-6B4FBB?style=for-the-badge)](hermes://mcp/install?name=foresee&config=eyJ1cmwiOiJodHRwczovL21jcC5nby1mb3Jlc2VlLmNvbS9tY3AiLCJhdXRoIjoib2F1dGgifQ)
+
+Everywhere else, point your client at the MCP endpoint:
 
 ```
 https://mcp.go-foresee.com/mcp
@@ -46,6 +47,7 @@ ChatGPT connects to remote MCP servers through **Developer Mode** (available on 
 mcp_servers:
   foresee:
     url: "https://mcp.go-foresee.com/mcp"
+    auth: oauth
 ```
 
 ### Any MCP client
