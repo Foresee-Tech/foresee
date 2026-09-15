@@ -24,16 +24,15 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
    keys like `geico`, `progressive`, `statefarm`, `allstate`, `mercury`, `kemper`,
    `csaa`, `farmers`, `usaa`). Otherwise omit it to compare everything available in
    that state.
-3. Call **`auto_insurance_quote_profile`** for the point estimate per carrier, with the
-   user's explicit `coverage_selection` (required — actual numbers, never invented; see
-   the `quote-insurance` skill). Each carrier comes back with `monthly`, a
-   `confidence_interval`, a per-line `coverages` breakdown at that selection (with
-   `semiannual_total` + `annual_total`),
-   a `price_ladder` (exact filed monthly at every rung of each lever), a `trust` block
-   (`verdict` + NAIC complaint index), `carrier_quote_url`, and (where loaded)
-   `coverage_options`. There is no separate serviceability tool: the quote tool
-   self-gates on state (an uncovered state returns a clear error naming the live states)
-   and its response carries top-level `assumptions`, `tighten_by`, and `failures`.
+3. Call **`auto_insurance_quote_profile`** for the instant per-carrier estimate.
+   Pass **`coverage_selection`** as actual numbers (`bi`, `pd`,
+   `coll_deductible`, `comp_deductible`). If the user didn't specify limits, pass
+   the common starting point (`"100/300"`, `100`, `500`, `500`) on the first call
+   and declare it. Each carrier comes back with `monthly`, a `confidence_interval`,
+   sub-coverage `L` lines at that selection, `D` / `price_ladder` deltas for every
+   filed rung of each lever, a `trust` verdict, and `carrier_quote_url`. An
+   uncovered state returns a clear error naming the live states. The response
+   carries top-level `assumptions`, `tighten_by`, and `failures`.
 4. When the user wants proven numbers or is ready to buy, offer live quotes:
    **`live_carrier_quotes`** drives the carriers' real sites and reads back the
    page-printed premium; where an engine baseline exists the results carry a
@@ -76,20 +75,20 @@ wants to trade coverage for price.
   resulting `monthly` values.
 - This is how you surface statements like *"Liberty Mutual is cheapest at a low
   deductible, but you want a high one, so GEICO wins for you."*
-- **Snapping.** Carriers have different filed ladders. When a requested rung doesn't
-  exist for a carrier, the cell reports what it was `snapped_to` — keep comparisons
-  honest by noting when two carriers were priced at slightly different rungs.
-- Use `coverage_options` (when present) to stay on each carrier's filed ladder rather
-  than requesting a level that doesn't exist.
+- **Missing rungs.** Carriers have different filed ladders. If a requested rung
+  isn't in that carrier's `D` / `price_ladder`, the filing has no such option —
+  say so rather than interpolating or implying they were priced at the same rung.
+- Stay on each carrier's filed ladder (`D` / `price_ladder` rungs) rather than
+  requesting a level that doesn't exist.
 
 ## The one hard rule: never invent a price
 
-Rank, filter, and pivot only over numbers Foresee returned — every `monthly`,
-coverage-line, and `price_ladder` value IS an exact re-rate. **Do not** compute a
-premium by multiplying `steps` factors, interpolate a deductible we didn't price, or
-synthesize a carrier's number from another's. If you want a number we didn't return (another carrier,
-another coverage selection), call the tool again — the server prices it. This is what
-keeps "every number is validated" true.
+Rank, filter, and pivot only over numbers Foresee returned — every `monthly`, `L`
+line, and `price_ladder` / `D` value IS an exact re-rate. **Do not** compute a
+premium by multiplying `F` factors, interpolate a deductible we didn't price, or
+synthesize a carrier's number from another's. If you want a selection we didn't
+return (another carrier, another coverage combination), call the tool again — the
+server prices it. This is what keeps "every number is validated" true.
 
 ## Honesty guardrails
 
