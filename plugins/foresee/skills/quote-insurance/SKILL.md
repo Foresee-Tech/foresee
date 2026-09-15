@@ -165,7 +165,7 @@ Commissioning requires consent:
 
 1. **Before the first call, tell the user plainly**: Foresee will submit their details
    to the named carriers; the carriers may obtain their credit-based insurance score 
-   (a soft pull, with no claims impact); and the carriers may contact them by email or phone.
+   (a soft pull, with no impact on your credit score); and the carriers may contact them by email or phone.
 2. Get their explicit go-ahead and pass it **verbatim** as `user_authorization`
    (e.g. "yes, go ahead").
 3. `identity` may be omitted for a signed-in user with a saved profile; otherwise collect
