@@ -1,19 +1,18 @@
 ---
 # @copy skill.quote-insurance audience=agent
 name: quote-insurance
-description: This skill should be used when the user wants a personal lines (especially home and auto) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my auto insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle details and asks for a price. Gathers the minimum profile conversationally and returns carrier quotes.
+description: This skill should be used when the user wants a personal lines insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my auto insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle details and asks for a price. Gathers the minimum profile conversationally and returns carrier quotes.
 version: 0.4.0
 ---
 
 # Quote Insurance
 
-Return estimated insurance quotes for the user by calling the `foresee` MCP
-tools. The tool returns an estimate with a confidence interval, broken down into sub-coverages, so that the user can make decisions about limits, deductibles, and so on across multiple carriers.
-Foresee bases rates on carriers' filed rate manuals, and gathers real quotes from carrier online quoting flows.
+Return estimated insurance quotes for the user by calling the `foresee` MCP tools. 
+Foresee returns quote estimates - per-carrier monthly point estimates, full sub-coverage detail, and a per-lever price ladder - so that the user can make decisions about limits, deductibles, and so on across multiple carriers.
 Foresee does not monetise by selling ads or leads.
 
-## Scope — auto only for now
-
+## Scope
+//todo - rewrite
 Foresee estimates **auto insurance** today; home and other lines are coming soon. This
 is the one disclaimer to give: if the user asks about a line that isn't live yet (home,
 condo, renters, etc.), say so plainly in a single sentence, then offer an auto quote if
@@ -90,7 +89,7 @@ of uncertainty below) — so you can still give a point estimate and then offer 
      comprehensive, UM…) at the selection you passed. Use these for "what am I
      paying for" and for 6-month/annual totals (`monthly × 6` / `× 12`).
    - **`price_ladder` / `D` rows** — for each lever (BI limit, PD limit,
-     collision/comprehensive deductible) the exact filed monthly at **every**
+     collision/comprehensive deductible) the exact price at **every**
      rung, one lever moved at a time (`new monthly = monthly + D delta`). This
      is how you answer "what would a $1000 deductible cost" — read the number
      off the ladder; never interpolate. If a rung is missing for a carrier,
@@ -109,7 +108,7 @@ This is the core of how Foresee talks about confidence. Never blur them.
   (e.g. an insurer's internal tier/placement) plus our measured engine-vs-reality
   error. Report it as confidence, **not** as a hedge, and **do not widen it** because
   the profile was incomplete.
-- **`assumptions` / `tighten_by` = reducible.** "If you also tell us your credit tier,
+- **`assumptions` / `tighten_by` = reducible.** "If you also tell us your credit score,
   we'll sharpen the number." These are fields the user didn't give, so Foresee assumed
   them. Still give the point estimate; then, if `tighten_by` is non-empty, tell the
   user which one or two facts would tighten it most and offer to re-run.
@@ -129,7 +128,7 @@ never a widened CI.
 - Give the interval as confidence: "**$148/mo** with GEICO — we're confident it's in the
   **$141–$158** range." If a carrier's interval is `unmeasured` or `structural-only`,
   say so plainly rather than implying tightness we haven't earned.
-- If `tighten_by` lists high-impact fields, add one line: "Tell me your credit range and
+- If `tighten_by` lists high-impact fields, add one line: "Tell me your credit score and
   I can narrow that."
 - Surface `failures` (e.g. USAA when the user isn't military-affiliated) rather than
   silently dropping carriers.
@@ -165,9 +164,8 @@ authorize.
 Commissioning requires consent:
 
 1. **Before the first call, tell the user plainly**: Foresee will submit their details
-   to the named carriers; the carriers may pull their credit report and driving record
-   (a soft pull — no credit-score impact); and the carriers may contact them by email
-   or phone.
+   to the named carriers; the carriers may obtain their credit-based insurance score 
+   (a soft pull, with no impact on your credit score); and the carriers may contact them by email or phone.
 2. Get their explicit go-ahead and pass it **verbatim** as `user_authorization`
    (e.g. "yes, go ahead").
 3. `identity` may be omitted for a signed-in user with a saved profile; otherwise collect
