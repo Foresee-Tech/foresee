@@ -1,13 +1,13 @@
 ---
 # @copy skill.compare-carriers audience=agent
 name: compare-carriers
-description: This skill should be used when the user wants to compare auto-insurance carriers or shop around — e.g. "compare car insurance companies", "who is cheapest for me", "is GEICO or Progressive cheaper", "should I switch from State Farm", or asks which carrier to pick. Ranks per-carrier point estimates and reasons about the coverage ladder across carriers.
+description: This skill should be used when the user wants to compare personal lines insurance carriers, shop around, or find the right insurance — e.g. "compare car insurance companies", "who is cheapest for me", "is GEICO or Progressive cheaper", "should I switch from State Farm".
 version: 0.4.0
 ---
 
 # Compare Carriers
 
-Help the user shop auto insurance by ranking carriers for their profile using the
+Help the user shop for insurance by ranking carriers for their profile using the
 `foresee` MCP tools, and — when it matters — reasoning about *how the coverage is set
 up*, because the cheapest carrier changes with the coverage selection.
 
@@ -24,13 +24,13 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
    keys like `geico`, `progressive`, `statefarm`, `allstate`, `mercury`, `kemper`,
    `csaa`, `farmers`, `usaa`). Otherwise omit it to compare everything available in
    that state.
-3. Call **`auto_insurance_quote_profile`** for the instant per-carrier estimate.
+3. Call **`quote_insurance`** for the instant per-carrier estimate.
    Pass **`coverage_selection`** as actual numbers (`bi`, `pd`,
    `coll_deductible`, `comp_deductible`). If the user didn't specify limits, pass
    the common starting point (`"100/300"`, `100`, `500`, `500`) on the first call
    and declare it. Each carrier comes back with `monthly`, a `confidence_interval`,
    sub-coverage `L` lines at that selection, `D` / `price_ladder` deltas for every
-   filed rung of each lever, a `trust` verdict, and `carrier_quote_url`. An
+   rung of each lever, a `trust` verdict, and `carrier_quote_url`. An
    uncovered state returns a clear error naming the live states. The response
    carries top-level `assumptions`, `tighten_by`, and `failures`.
 4. When the user wants proven numbers or is ready to buy, offer live quotes:
@@ -67,7 +67,7 @@ This is a real lever — use it when the user cares about a specific coverage le
 wants to trade coverage for price.
 
 - **Read the `price_ladder` first.** Each carrier's ladder already gives the exact
-  monthly at every filed rung of each lever, so "who's cheapest at a $1000 deductible?"
+  monthly at every rung of each lever, so "who's cheapest at a $1000 deductible?"
   is a direct read across carriers — no extra calls, no interpolation.
 - **Re-price an explicit combined selection** when the user pins several levers at once:
   pass `coverage_selection` (e.g. `{"bi": "100/300", "coll_deductible": 1000,
@@ -75,10 +75,10 @@ wants to trade coverage for price.
   resulting `monthly` values.
 - This is how you surface statements like *"Liberty Mutual is cheapest at a low
   deductible, but you want a high one, so GEICO wins for you."*
-- **Missing rungs.** Carriers have different filed ladders. If a requested rung
+- **Missing rungs.** Carriers have different ladders. If a requested rung
   isn't in that carrier's `D` / `price_ladder`, the filing has no such option —
   say so rather than interpolating or implying they were priced at the same rung.
-- Stay on each carrier's filed ladder (`D` / `price_ladder` rungs) rather than
+- Stay on each carrier's ladder (`D` / `price_ladder` rungs) rather than
   requesting a level that doesn't exist.
 
 ## The one hard rule: never invent a price

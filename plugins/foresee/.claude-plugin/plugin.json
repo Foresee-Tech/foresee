@@ -1,7 +1,7 @@
 {
   "name": "foresee",
   "version": "0.3.0",
-  "description": "AI should shop for your home and auto insurance. Foresee returns quotes from every carrier as structured objects that agents can reason about.",
+  "description": "Shop for home and auto insurance. Foresee gives AI assistants detailed quote estimates from every carrier.",
   "author": {
     "name": "Foresee Insurance Services, LLC"
   },
@@ -19,3 +19,4 @@
   ],
   "defaultEnabled": false
 }
+

@@ -24,7 +24,7 @@ Everything below describes the live auto flow.
 
 Foresee is a two-part system, and the trust comes from how they fit together:
 
-1. **Deterministic rate engines (instant).** `auto_insurance_quote_profile` runs each
+1. **Deterministic rate engines (instant).** `quote_insurance` runs each
    carrier's *filed rate manual* against the profile and returns an exact computed
    premium per carrier — with a full sub-coverage breakdown and a price ladder — in one
    call. This is the headline answer and the default path.
@@ -66,7 +66,7 @@ of uncertainty below) — so you can still give a point estimate and then offer 
    most **one** round of 2–4 short high-impact questions, then call once. When the
    user has already given almost all of ZIP, age, vehicle, and driving history,
    call in the first reply — price first, don't ask first.
-2. Call **`auto_insurance_quote_profile`** with a `profile` dict, using the schema's
+2. Call **`quote_insurance`** with a `profile` dict, using the schema's
    exact field names (`zip_code`, `vehicle_year`, `accidents_3yr`, …). This is the
    instant rate-engine tool: one exact filing-based run per carrier. Pass
    **`coverage_selection`** as actual numbers on four axes — `bi` (e.g. `"100/300"`),

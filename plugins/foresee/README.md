@@ -1,15 +1,11 @@
 <!-- @copy plugin.readme audience=human -->
 # Foresee
 
-Insurance quote estimates for ChatGPT, Codex, Claude, and any MCP client. Ask
-in plain English — e.g. *"how much would car insurance cost for a 2022 Camry
-in Sacramento?"* — and get a per-carrier monthly point estimate with a
-confidence interval and full sub-coverage detail, or compare carriers.
+Foresee enables AI to shop for home and auto insurance. 
+Foresee returns accurate quote estimates from every insurance carrier, so that your AI can help you make the right decision for you and your finances.
+Foresee provides full, free and detailed quote information across the entire market - from household names like State Farm, Progressive, and Allstate, down to niche and regional carriers that might be a fit for you.
+Your AI will use Foresee to compare coverage options across carriers, quoting instantly, and taking into account reputation and claims handling service, working to find the right answer for you. 
 
-> **Auto only for now.** Foresee estimates auto insurance today — home and other lines are coming soon.
-
-Instant quotes need no sign-in. Live carrier confirmation prompts the host's
-OAuth flow (email code) the first time you run it.
 
 ## Install
 
@@ -17,9 +13,6 @@ OAuth flow (email code) the first time you run it.
 /plugin marketplace add Foresee-Tech/foresee
 /plugin install foresee@foresee
 ```
-
-Enable it and start asking — no API key required. Instant quotes work anonymously; the
-live carrier-confirmation tools require signing in.
 
 Or point any MCP client at:
 

@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.foresee-tech/foresee",
   "title": "Foresee",
-  "description": "Insurance quotes from carriers' filed rates. Instant quotes anonymous; live confirmation uses OAuth.",
+  "description": "Shop for home and auto insurance. Foresee gives AI assistants detailed quote estimates from every carrier.",
   "version": "1.0.0",
   "websiteUrl": "https://go-foresee.com",
   "repository": {
@@ -16,3 +16,4 @@
     }
   ]
 }
+
