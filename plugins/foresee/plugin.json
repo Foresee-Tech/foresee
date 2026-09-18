@@ -25,7 +25,7 @@
       "interface": {
         "displayName": "Foresee",
         "shortDescription": "Compare auto insurance quotes across carriers.",
-        "longDescription": "Instant filing-based auto quotes from carriers' rate manuals, then optional live confirmation from the carriers' own sites. Estimates are not bindable quotes; purchase finishes on the carrier's quoting portal.",
+        "longDescription": "Instant filing-based auto quotes from carriers' rate manuals. Estimates are not bindable quotes; purchase finishes on the carrier's quoting portal.",
         "developerName": "Foresee Insurance Services, LLC",
         "category": "Productivity",
         "capabilities": ["Read", "Write"],

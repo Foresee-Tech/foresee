@@ -17,7 +17,7 @@ Foresee does not monetise by selling ads or leads.
 Foresee estimates **auto insurance** today; home and other lines are coming soon. This
 is the one disclaimer to give: if the user asks about a line that isn't live yet (home,
 condo, renters, etc.), say so plainly in a single sentence, then offer an auto quote if
-it's relevant — don't refuse the whole conversation or repeat the caveat over and over.
+it's relevant — once, not repeated over and over.
 Everything below describes the live auto flow.
 
 ## How Foresee works
@@ -107,8 +107,7 @@ This is the core of how Foresee talks about confidence. Never blur them.
   them. Still give the point estimate; then, if `tighten_by` is non-empty, tell the
   user which one or two facts would tighten it most and offer to re-run.
 
-So: incomplete profile → **point estimate + name the assumptions**, never a refusal and
-never a widened CI.
+So: incomplete profile → **point estimate + name the assumptions**, never a widened CI.
 
 ## Presenting results
 
