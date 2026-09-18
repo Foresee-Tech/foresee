@@ -1,8 +1,8 @@
 ---
-# @copy skill.compare-carriers audience=agent
+# @copy skill.agents.compare-carriers audience=agent
 name: compare-carriers
 description: This skill should be used when the user wants to compare personal lines insurance carriers, shop around, or find the right insurance — e.g. "compare car insurance companies", "who is cheapest for me", "is GEICO or Progressive cheaper", "should I switch from State Farm".
-version: 0.5.0
+version: 0.1.0
 ---
 
 # Compare Carriers
@@ -33,9 +33,16 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
    rung of each lever, a `trust` verdict, and `carrier_quote_url`. An
    uncovered state returns a clear error naming the live states. The response
    carries top-level `assumptions`, `tighten_by`, and `failures`.
-4. When the user is ready to buy, hand off to the winning carrier's
-   `carrier_quote_url` — the purchase finishes on the carrier's own quoting portal
-   (see the `quote-insurance` skill for the hand-off detail).
+4. When the user wants proven numbers or is ready to buy, offer live quotes:
+   **`live_carrier_quotes`** drives the carriers' real sites and reads back the
+   page-printed premium; where an engine baseline exists the results carry a
+   `confirmation` block comparing it against the engine estimate. The tool is
+   idempotent — re-call it with the same arguments to collect progress and results,
+   and an already-walked profile returns its existing results without re-submitting.
+   Commissioning requires consent — see the `quote-insurance` skill for the exact
+   disclosure and the verbatim `user_authorization` requirement. Fold completed
+   quotes into the comparison and call out anything now cheaper than the previous
+   best; a carrier `declined` is a real answer, relay it.
 
 ## Presenting results
 

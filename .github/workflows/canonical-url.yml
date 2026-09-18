@@ -1,9 +1,9 @@
 name: Canonical MCP URL
 
-# The Foresee MCP server has exactly one public URL: https://mcp.go-foresee.com/mcp.
-# Cloud Run's generated *.run.app hostname still resolves (the server redirects
-# it), but nothing in this repo may hand it to a client — including the
-# base64-encoded config inside the Cursor install button.
+# Public URLs: https://mcp.go-foresee.com/mcp (instant quotes) and
+# https://agents.go-foresee.com/mcp (adds live carrier quotes). Never the
+# generated *.run.app hostnames. server.json and plugins/foresee/ point at
+# the mcp host.
 
 on:
   push:
@@ -18,26 +18,36 @@ jobs:
       - name: No Cloud Run hostname in tracked files
         run: |
           if git grep -n -I -E -e '[a-z0-9-]+\.(a\.)?run\.app' -- . ':!.github/workflows/canonical-url.yml'; then
-            echo "::error::Cloud Run hostname found; the only public URL is https://mcp.go-foresee.com/mcp"
+            echo "::error::Cloud Run hostname found; use the go-foresee.com URLs"
             exit 1
           fi
 
-      - name: Every install-button payload points at the canonical host
+      - name: server.json and plugins/foresee use the mcp host
+        run: |
+          if git grep -n -I -e 'agents\.go-foresee\.com' -- server.json plugins/foresee/; then
+            echo "::error::server.json and plugins/foresee/ point at https://mcp.go-foresee.com/mcp"
+            exit 1
+          fi
+
+      - name: Install buttons point at a canonical host
         run: |
           python3 - <<'EOF'
           import base64, json, re, sys
           from urllib.parse import unquote, urlsplit
-          CANONICAL_HOST = "mcp.go-foresee.com"
+          CANONICAL_HOSTS = {"mcp.go-foresee.com", "agents.go-foresee.com"}
           text = open("README.md", encoding="utf-8").read()
           urls = []
           for payload in re.findall(r"install-mcp\?[^)]*?config=([A-Za-z0-9_=+/-]+)", text):
               padded = payload + "=" * (-len(payload) % 4)
               urls.append(json.loads(base64.urlsafe_b64decode(padded))["url"])
+          for payload in re.findall(r"hermes://mcp/install\?[^)\"]*?config=([A-Za-z0-9_=+/-]+)", text):
+              padded = payload + "=" * (-len(payload) % 4)
+              urls.append(json.loads(base64.urlsafe_b64decode(padded))["url"])
           urls += [unquote(u) for u in re.findall(r"connectorUrl=([^)&]+)", text)]
-          bad = [u for u in urls if urlsplit(u).netloc != CANONICAL_HOST]
+          bad = [u for u in urls if urlsplit(u).netloc not in CANONICAL_HOSTS]
           if not urls:
               sys.exit("no install buttons found in README.md — check the regexes")
           if bad:
               sys.exit(f"install buttons point off-canonical: {bad}")
-          print(f"OK: {len(urls)} install-button URL(s) on {CANONICAL_HOST}")
+          print(f"OK: {len(urls)} install-button URL(s)")
           EOF
