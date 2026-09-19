@@ -8,24 +8,13 @@
   "plugins": [
     {
       "name": "foresee",
-      "description": "Shop for home and auto insurance. Foresee gives AI assistants detailed quote estimates from every carrier.",
+      "description": "Shop for home and auto insurance with live carrier quotes. Instant filing-based estimates plus Foresee agents that complete the carriers' own quote flows — with the user's explicit consent — and read back the real page premium.",
       "author": {
         "name": "Foresee"
       },
       "category": "personal-finance",
       "source": "./plugins/foresee",
       "homepage": "https://github.com/Foresee-Tech/foresee"
-    },
-    {
-      "name": "foresee-agents",
-      "description": "Shop for home and auto insurance with live carrier quotes. Instant estimates plus Foresee agents that complete the carriers' own quote flows with the user's explicit consent.",
-      "author": {
-        "name": "Foresee"
-      },
-      "category": "personal-finance",
-      "source": "./plugins/foresee-agents",
-      "homepage": "https://github.com/Foresee-Tech/foresee"
     }
   ]
 }
-

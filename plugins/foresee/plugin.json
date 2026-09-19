@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "foresee",
-  "version": "0.3.0",
-  "description": "Shop for home and auto insurance. Foresee gives AI assistants detailed quote estimates from every carrier.",
+  "version": "0.4.0",
+  "description": "Shop for home and auto insurance with live carrier quotes. Instant filing-based estimates plus Foresee agents that complete the carriers' own quote flows — with the user's explicit consent — and read back the real page premium.",
   "author": {
     "name": "Foresee Insurance Services, LLC",
     "email": "support@go-foresee.com",
@@ -18,6 +18,7 @@
     "quotes",
     "rates",
     "rate-comparison",
+    "live-quotes",
     "personal-finance"
   ],
   "extensions": {
@@ -25,10 +26,13 @@
       "interface": {
         "displayName": "Foresee",
         "shortDescription": "Compare auto insurance quotes across carriers.",
-        "longDescription": "Instant filing-based auto quotes from carriers' rate manuals. Estimates are not bindable quotes; purchase finishes on the carrier's quoting portal.",
+        "longDescription": "Instant filing-based auto quotes from carriers' rate manuals, plus live premiums read back from the carriers' own quote flows with the user's explicit consent. Estimates are not bindable quotes; purchase finishes on the carrier's quoting portal.",
         "developerName": "Foresee Insurance Services, LLC",
         "category": "Productivity",
-        "capabilities": ["Read", "Write"],
+        "capabilities": [
+          "Read",
+          "Write"
+        ],
         "websiteURL": "https://go-foresee.com",
         "privacyPolicyURL": "https://go-foresee.com/privacy",
         "termsOfServiceURL": "https://go-foresee.com/terms",
@@ -44,4 +48,3 @@
     }
   }
 }
-

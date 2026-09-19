@@ -6,6 +6,10 @@ Foresee returns accurate quote estimates from every insurance carrier, so that y
 Foresee provides full, free and detailed quote information across the entire market - from household names like State Farm, Progressive, and Allstate, down to niche and regional carriers that might be a fit for you.
 Your AI will use Foresee to compare coverage options across carriers, quoting instantly, and taking into account reputation and claims handling service, working to find the right answer for you. 
 
+Beyond instant estimates, Foresee agents can complete the carriers' own online
+quote flows and read back the page-printed premium, so the estimate comes with
+proof it holds up on the carrier's site. Live submissions run only with the
+user's explicit, in-chat consent, and no sign-in is needed.
 
 ## Install
 
@@ -17,5 +21,5 @@ Your AI will use Foresee to compare coverage options across carriers, quoting in
 Or point any MCP client at:
 
 ```
-https://mcp.go-foresee.com/mcp
+https://agents.go-foresee.com/mcp
 ```

@@ -1,8 +1,8 @@
 ---
 # @copy skill.quote-insurance audience=agent
 name: quote-insurance
-description: This skill should be used when the user wants a personal lines (especially home and auto) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my auto insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle details and asks for a price. Gathers the minimum profile conversationally and returns carrier quotes.
-version: 0.5.0
+description: This skill should be used when the user wants a personal lines (especially home and auto) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my auto insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle details and asks for a price. Gathers the minimum profile conversationally and returns carrier quotes, with optional live confirmation from the carriers' own sites.
+version: 0.6.0
 ---
 
 # Quote Insurance
@@ -20,14 +20,21 @@ condo, renters, etc.), say so plainly in a single sentence, then offer an auto q
 it's relevant — once, not repeated over and over.
 Everything below describes the live auto flow.
 
-## How Foresee works
+## How Foresee works — two parts
 
-`quote_insurance` runs each carrier's *filed rate manual* against the profile and
-returns an exact computed premium per carrier — with a full sub-coverage breakdown
-and a price ladder — in one call. Foresee continuously validates these engines
-against the premiums the carriers' own quoting sites print; that measured error is
-what each carrier's confidence interval reports. The purchase itself always finishes
-on the carrier's own quoting portal (see the hand-off section below).
+Foresee is a two-part system, and the trust comes from how they fit together:
+
+1. **Deterministic rate engines (instant).** `quote_insurance` runs each
+   carrier's *filed rate manual* against the profile and returns an exact computed
+   premium per carrier — with a full sub-coverage breakdown and a price ladder — in one
+   call. This is the headline answer and the default path.
+2. **Live carrier agents.** Foresee agents drive the carriers' own quoting websites
+   with the quoted details and read back the page-printed premium — one tool,
+   `live_carrier_quotes`. Where an engine baseline exists, the results carry a
+   `confirmation` block comparing the two, so the user sees the instant quote *and*
+   proof it holds up on the carrier's site.
+
+Lead with part 1; offer part 2 when the user is ready to act on real numbers.
 
 ## When this applies
 
@@ -125,9 +132,57 @@ So: incomplete profile → **point estimate + name the assumptions**, never a wi
 - Surface `failures` (e.g. USAA when the user isn't military-affiliated) rather than
   silently dropping carriers.
 - The instant quote is a filing-based estimate, **not a bindable quote**. End on the
-  next concrete action — usually the recommended carrier's quoting-portal link.
+  next concrete action — usually the recommended carrier's quoting-portal link, or
+  an offer to confirm live (below).
 - Offer the `price_ladder` / sub-coverage detail or a coverage change (see
   `explain-coverage` / `compare-carriers`) if the user wants to go deeper.
+
+## Live quotes from the carrier's own site — agents
+
+When the user wants firm, proven numbers (or is ready to buy), Foresee agents complete
+the carriers' real quote flows and read back the page premium. Hypothetical or synthetic
+profiles are fine: someone exploring "what would a driver like this pay" can fan out
+live agents just like someone quoting their own details. When the details ARE the
+user's real PII, the consent disclosure below is what makes the submission theirs to
+authorize.
+
+- **`live_carrier_quotes`** — the live-walk tool. IDEMPOTENT, keyed on profile +
+  the ask. `lines` names WHICH line to walk, exactly one per call — e.g.
+  `{"auto": {...the ask...}}`. An auto walk's ask is required (the same four
+  axes as the instant tool); without it the tool answers with the
+  selection-required message — ask the user, then call again.
+  The first call commissions the walks; calling again with the SAME arguments
+  collects progress and results instead of re-submitting. A profile that has
+  already been walked returns those results — the carriers are never asked twice.
+  **No sign-in or account is required.** The one hard gate is the user's own
+  consent, captured in-band: a call without a verbatim `user_authorization` is
+  refused with `authorization_required` — relay the disclosure, get the
+  go-ahead, and call again. Never invent a live premium.
+
+Commissioning requires consent:
+
+1. **Before the first call, tell the user plainly**: Foresee will submit their details
+   to the named carriers; the carriers may obtain their credit-based insurance score
+   (a soft pull — no credit-score impact); and the carriers may contact them by email
+   or phone.
+2. Get their explicit go-ahead and pass it **verbatim** as `user_authorization`
+   (e.g. "yes, go ahead"). That affirmation is stored as the durable consent record
+   for the dispatch.
+3. Collect the `identity` fields in chat (name, DOB, street address, email — never
+   SSN or a driver's license number; no supported carrier flow needs them to quote).
+   They may be omitted only when the user is signed in on the Foresee site with a
+   saved profile. A `missing_facts` response is normal — carrier forms
+   insist on facts Foresee won't invent (body style, purchase date, age first
+   licensed…); ask the user for exactly the `needs` listed and call again.
+
+Collect results by re-calling `live_carrier_quotes` with the same arguments after a
+minute or two; agents still working report their stage, so it's safe to check early and
+again. Fold completed quotes into the table and call out anything now cheaper than the
+previous best. An envelope with an engine baseline carries a `confirmation` block per
+carrier — `engine_monthly` vs `observed_monthly`, the delta, and whether the live number
+fell inside the engine's interval; **present the two numbers side by side with the
+delta.** A carrier `declined` is a real answer from the carrier, not an error — relay
+it plainly.
 
 ## Finishing up — hand off to the carrier
 

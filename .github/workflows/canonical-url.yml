@@ -1,9 +1,7 @@
 name: Canonical MCP URL
 
-# Public URLs: https://mcp.go-foresee.com/mcp (instant quotes) and
-# https://agents.go-foresee.com/mcp (adds live carrier quotes). Never the
-# generated *.run.app hostnames. server.json and plugins/foresee/ point at
-# the mcp host.
+# Public URL: https://agents.go-foresee.com/mcp — everywhere in this repo.
+# Never the generated *.run.app hostnames.
 
 on:
   push:
@@ -18,23 +16,23 @@ jobs:
       - name: No Cloud Run hostname in tracked files
         run: |
           if git grep -n -I -E -e '[a-z0-9-]+\.(a\.)?run\.app' -- . ':!.github/workflows/canonical-url.yml'; then
-            echo "::error::Cloud Run hostname found; use the go-foresee.com URLs"
+            echo "::error::Cloud Run hostname found; use https://agents.go-foresee.com/mcp"
             exit 1
           fi
 
-      - name: server.json and plugins/foresee use the mcp host
+      - name: One MCP host repo-wide
         run: |
-          if git grep -n -I -e 'agents\.go-foresee\.com' -- server.json plugins/foresee/; then
-            echo "::error::server.json and plugins/foresee/ point at https://mcp.go-foresee.com/mcp"
+          if git grep -n -I -e 'mcp\.go-foresee\.com' -- . ':!.github/workflows/canonical-url.yml'; then
+            echo "::error::this repo points at https://agents.go-foresee.com/mcp"
             exit 1
           fi
 
-      - name: Install buttons point at a canonical host
+      - name: Install buttons point at the canonical host
         run: |
           python3 - <<'EOF'
           import base64, json, re, sys
           from urllib.parse import unquote, urlsplit
-          CANONICAL_HOSTS = {"mcp.go-foresee.com", "agents.go-foresee.com"}
+          CANONICAL_HOSTS = {"agents.go-foresee.com"}
           text = open("README.md", encoding="utf-8").read()
           urls = []
           for payload in re.findall(r"install-mcp\?[^)]*?config=([A-Za-z0-9_=+/-]+)", text):
