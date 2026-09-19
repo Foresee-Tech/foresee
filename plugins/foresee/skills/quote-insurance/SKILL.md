@@ -109,7 +109,7 @@ This is the core of how Foresee talks about confidence. Never blur them.
   (e.g. an insurer's internal tier/placement) plus our measured engine-vs-reality
   error. Report it as confidence, **not** as a hedge, and **do not widen it** because
   the profile was incomplete.
-- **`assumptions` / `tighten_by` = reducible.** "If you also tell us your credit tier,
+- **`assumptions` / `tighten_by` = reducible.** "If you also tell us your credit score,
   we'll sharpen the number." These are fields the user didn't give, so Foresee assumed
   them. Still give the point estimate; then, if `tighten_by` is non-empty, tell the
   user which one or two facts would tighten it most and offer to re-run.
@@ -127,7 +127,7 @@ So: incomplete profile → **point estimate + name the assumptions**, never a wi
 - Give the interval as confidence: "**$148/mo** with GEICO — we're confident it's in the
   **$141–$158** range." If a carrier's interval is `unmeasured` or `structural-only`,
   say so plainly rather than implying tightness we haven't earned.
-- If `tighten_by` lists high-impact fields, add one line: "Tell me your credit range and
+- If `tighten_by` lists high-impact fields, add one line: "Tell me your credit score and
   I can narrow that."
 - Surface `failures` (e.g. USAA when the user isn't military-affiliated) rather than
   silently dropping carriers.
