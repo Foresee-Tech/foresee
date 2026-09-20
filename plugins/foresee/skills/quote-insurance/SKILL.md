@@ -90,7 +90,7 @@ of uncertainty below) — so you can still give a point estimate and then offer 
      comprehensive, UM…) at the selection you passed. Use these for "what am I
      paying for" and for 6-month/annual totals (`monthly × 6` / `× 12`).
    - **`price_ladder` / `D` rows** — for each lever (BI limit, PD limit,
-     collision/comprehensive deductible) the exact filed monthly at **every**
+     collision/comprehensive deductible) the exact price at **every**
      rung, one lever moved at a time (`new monthly = monthly + D delta`). This
      is how you answer "what would a $1000 deductible cost" — read the number
      off the ladder; never interpolate. If a rung is missing for a carrier,
