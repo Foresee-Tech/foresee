@@ -7,9 +7,8 @@ version: 0.6.0
 
 # Quote Insurance
 
-Return estimated insurance quotes for the user by calling the `foresee` MCP
-tools. The tool returns an estimate with a confidence interval, broken down into sub-coverages, so that the user can make decisions about limits, deductibles, and so on across multiple carriers.
-Foresee bases rates on carriers' filed rate manuals, and gathers real quotes from carrier online quoting flows.
+Return estimated insurance quotes for the user by calling the `foresee` MCP tools.
+Foresee returns quote estimates - per-carrier monthly point estimates, full sub-coverage detail, and a per-lever price ladder - so that the user can make decisions about limits, deductibles, and so on across multiple carriers.
 Foresee does not monetise by selling ads or leads.
 
 ## Scope — auto only for now
