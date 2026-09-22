@@ -1,15 +1,14 @@
 ---
 # @copy skill.quote-insurance audience=agent
 name: quote-insurance
-description: This skill should be used when the user wants a personal lines (especially home and auto) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my auto insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle details and asks for a price. Gathers the minimum profile conversationally and returns carrier quotes.
-version: 0.4.0
+description: This skill should be used when the user wants a personal lines (especially home and auto) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my auto insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle details and asks for a price. Gathers the minimum profile conversationally and returns carrier quotes, with optional live confirmation from the carriers' own sites.
+version: 0.7.0
 ---
 
 # Quote Insurance
 
-Return estimated insurance quotes for the user by calling the `foresee` MCP
-tools. The tool returns an estimate with a confidence interval, broken down into sub-coverages, so that the user can make decisions about limits, deductibles, and so on across multiple carriers.
-Foresee bases rates on carriers' filed rate manuals, and gathers real quotes from carrier online quoting flows.
+Return estimated insurance quotes for the user by calling the `foresee` MCP tools.
+Foresee returns quote estimates - per-carrier monthly point estimates, full sub-coverage detail, and a per-lever price ladder - so that the user can make decisions about limits, deductibles, and so on across multiple carriers.
 Foresee does not monetise by selling ads or leads.
 
 ## Scope — auto only for now
@@ -17,7 +16,7 @@ Foresee does not monetise by selling ads or leads.
 Foresee estimates **auto insurance** today; home and other lines are coming soon. This
 is the one disclaimer to give: if the user asks about a line that isn't live yet (home,
 condo, renters, etc.), say so plainly in a single sentence, then offer an auto quote if
-it's relevant — don't refuse the whole conversation or repeat the caveat over and over.
+it's relevant — once, not repeated over and over.
 Everything below describes the live auto flow.
 
 ## How Foresee works — two parts
@@ -67,18 +66,19 @@ of uncertainty below) — so you can still give a point estimate and then offer 
    user has already given almost all of ZIP, age, vehicle, and driving history,
    call in the first reply — price first, don't ask first.
 2. Call **`quote_insurance`** with a `profile` dict, using the schema's
-   exact field names (`zip_code`, `vehicle_year`, `accidents_3yr`, …). This is the
+   exact field names: the core carries `zip_code` and `age` (or `dob`), the
+   `auto` block carries `vehicles[]` (year/make/model) and `drivers[]`, and
+   prior coverage rides `prior_insurance`. This is the
    instant rate-engine tool: one exact filing-based run per carrier. Pass
-   **`coverage_selection`** as actual numbers on four axes — `bi` (e.g. `"100/300"`),
-   `pd` (e.g. `100`), `coll_deductible` (e.g. `500`), `comp_deductible` (e.g. `500`).
+   **`lines`** — ONE map naming the line to price, with that line's ask as
+   actual numbers on four axes: `lines={"auto": {"bi": "100/300", "pd": 100,
+   "coll_deductible": 500, "comp_deductible": 500}}` (`um` / `medpay` optional).
    If the user stated limits or deductibles, use them; otherwise pass that common
    starting point on the **first** call and declare it as an adjustable assumption.
-   Set `perspective="self"` when the profile is the signed-in user's own; leave it
-   `"hypothetical"` for what-ifs.
 3. The content channel is compact machine text (not JSON): a `Q` header, then `C`
    carrier rows, `L` sub-coverage lines, `F` rating factors, and `D` lever deltas.
-   Structured headlines still carry `monthly`, `confidence_interval`,
-   `trust_verdict`, and `carrier_quote_url`. Read off, per carrier:
+   Priced results are keyed per line under `by_line`; structured headlines still
+   carry `monthly`, `confidence_interval`, and `carrier_quote_url`. Read off, per carrier:
    - **`monthly`** — the headline point estimate, priced at the selection you
      passed. The `C` row also names the writing company; `carrier_quote_url` is
      where the user finishes (see purchase, below).
@@ -90,13 +90,11 @@ of uncertainty below) — so you can still give a point estimate and then offer 
      comprehensive, UM…) at the selection you passed. Use these for "what am I
      paying for" and for 6-month/annual totals (`monthly × 6` / `× 12`).
    - **`price_ladder` / `D` rows** — for each lever (BI limit, PD limit,
-     collision/comprehensive deductible) the exact filed monthly at **every**
+     collision/comprehensive deductible) the exact price at **every**
      rung, one lever moved at a time (`new monthly = monthly + D delta`). This
      is how you answer "what would a $1000 deductible cost" — read the number
      off the ladder; never interpolate. If a rung is missing for a carrier,
      that filing has no such option.
-   - **`trust`** — `verdict` (solid / caution / unverified). Compare carriers to
-     each other, not to an absolute index.
 4. Read the top-level **`assumptions`**, **`tighten_by`**, and **`failures`** and
    act on them (below).
 
@@ -109,27 +107,25 @@ This is the core of how Foresee talks about confidence. Never blur them.
   (e.g. an insurer's internal tier/placement) plus our measured engine-vs-reality
   error. Report it as confidence, **not** as a hedge, and **do not widen it** because
   the profile was incomplete.
-- **`assumptions` / `tighten_by` = reducible.** "If you also tell us your credit tier,
+- **`assumptions` / `tighten_by` = reducible.** "If you also tell us your credit score,
   we'll sharpen the number." These are fields the user didn't give, so Foresee assumed
   them. Still give the point estimate; then, if `tighten_by` is non-empty, tell the
   user which one or two facts would tighten it most and offer to re-run.
 
-So: incomplete profile → **point estimate + name the assumptions**, never a refusal and
-never a widened CI.
+So: incomplete profile → **point estimate + name the assumptions**, never a widened CI.
 
 ## Presenting results
 
 - **Open with the decision.** Name the best option for this user (price + a one-line
   reason) before anything else — you are presenting Foresee's own computed quotes, so
-  state prices as facts and don't add personal-advisor caveats or tell the user to
-  re-confirm with the carrier.
-- Then a compact table sorted **cheapest-first**: **Carrier · Monthly · 6-month total ·
-  Trust**. Call out the **annual dollar spread** between the cheapest and priciest
+  state prices as facts.
+- Then a compact table sorted **cheapest-first**: **Carrier · Monthly · 6-month
+  total**. Call out the **annual dollar spread** between the cheapest and priciest
   options — that spread is the reason to compare.
 - Give the interval as confidence: "**$148/mo** with GEICO — we're confident it's in the
   **$141–$158** range." If a carrier's interval is `unmeasured` or `structural-only`,
   say so plainly rather than implying tightness we haven't earned.
-- If `tighten_by` lists high-impact fields, add one line: "Tell me your credit range and
+- If `tighten_by` lists high-impact fields, add one line: "Tell me your credit score and
   I can narrow that."
 - Surface `failures` (e.g. USAA when the user isn't military-affiliated) rather than
   silently dropping carriers.
@@ -149,29 +145,31 @@ user's real PII, the consent disclosure below is what makes the submission their
 authorize.
 
 - **`live_carrier_quotes`** — the live-walk tool. IDEMPOTENT, keyed on profile +
-  coverage selection.
-  `coverage_selection` is required here too (same four axes as the instant tool).
+  the ask. `lines` names WHICH line to walk, exactly one per call — e.g.
+  `{"auto": {...the ask...}}`. An auto walk's ask is required (the same four
+  axes as the instant tool); without it the tool answers with the
+  selection-required message — ask the user, then call again.
   The first call commissions the walks; calling again with the SAME arguments
   collects progress and results instead of re-submitting. A profile that has
   already been walked returns those results — the carriers are never asked twice.
-  The user must be signed in (OAuth); an anonymous call returns `sign_in_required`.
-  Its tool description states whether this session is signed in (the `AUTH STATUS`
-  line). If the host prompts the user to connect or sign in to Foresee, let them
-  finish that flow, then retry this tool. Do not tell them to install a different
-  client or plugin. If a call returns `sign_in_required` without a host prompt,
-  ask them to connect Foresee in their client's connector settings and retry —
-  do not invent a live premium.
+  **No sign-in or account is required.** The one hard gate is the user's own
+  consent, captured in-band: a call without a verbatim `user_authorization` is
+  refused with `authorization_required` — relay the disclosure, get the
+  go-ahead, and call again. Never invent a live premium.
 
 Commissioning requires consent:
 
 1. **Before the first call, tell the user plainly**: Foresee will submit their details
-   to the named carriers; the carriers may pull their credit report and driving record
+   to the named carriers; the carriers may obtain their credit-based insurance score
    (a soft pull — no credit-score impact); and the carriers may contact them by email
    or phone.
 2. Get their explicit go-ahead and pass it **verbatim** as `user_authorization`
-   (e.g. "yes, go ahead").
-3. `identity` may be omitted for a signed-in user with a saved profile; otherwise collect
-   the identity fields in chat. A `missing_facts` response is normal — carrier forms
+   (e.g. "yes, go ahead"). That affirmation is stored as the durable consent record
+   for the dispatch.
+3. Collect the `identity` fields in chat (name, DOB, street address, email — never
+   SSN or a driver's license number; no supported carrier flow needs them to quote).
+   They may be omitted only when the user is signed in on the Foresee site with a
+   saved profile. A `missing_facts` response is normal — carrier forms
    insist on facts Foresee won't invent (body style, purchase date, age first
    licensed…); ask the user for exactly the `needs` listed and call again.
 
@@ -199,8 +197,8 @@ Only ever quote a number Foresee returned. Every `monthly`, every `L` line, and
 every `price_ladder` / `D` rung **is** an exact re-rate — use those freely. But
 **do not** multiply the `F` factors yourself, do not interpolate a limit/deductible
 or a combination we didn't price, and do not average carriers into a made-up figure.
-If the user wants a coverage combination or carrier we didn't return, pass a new
-`coverage_selection` and call the tool again. Every dollar you show must be one the
+If the user wants a coverage combination or carrier we didn't return, re-call the
+tool with the new ask in `lines`. Every dollar you show must be one the
 engine computed — that is what lets us stand behind it.
 
 ## Unsupported states

@@ -2,7 +2,7 @@
   "mcpServers": {
     "foresee": {
       "type": "http",
-      "url": "https://mcp.go-foresee.com/mcp"
+      "url": "https://agents.go-foresee.com/mcp"
     }
   }
 }
