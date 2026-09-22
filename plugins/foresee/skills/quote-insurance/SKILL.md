@@ -2,7 +2,7 @@
 # @copy skill.quote-insurance audience=agent
 name: quote-insurance
 description: This skill should be used when the user wants a personal lines (especially home and auto) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my auto insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle details and asks for a price. Gathers the minimum profile conversationally and returns carrier quotes, with optional live confirmation from the carriers' own sites.
-version: 0.6.0
+version: 0.7.0
 ---
 
 # Quote Insurance
@@ -66,18 +66,19 @@ of uncertainty below) — so you can still give a point estimate and then offer 
    user has already given almost all of ZIP, age, vehicle, and driving history,
    call in the first reply — price first, don't ask first.
 2. Call **`quote_insurance`** with a `profile` dict, using the schema's
-   exact field names (`zip_code`, `vehicle_year`, `accidents_3yr`, …). This is the
+   exact field names: the core carries `zip_code` and `age` (or `dob`), the
+   `auto` block carries `vehicles[]` (year/make/model) and `drivers[]`, and
+   prior coverage rides `prior_insurance`. This is the
    instant rate-engine tool: one exact filing-based run per carrier. Pass
-   **`coverage_selection`** as actual numbers on four axes — `bi` (e.g. `"100/300"`),
-   `pd` (e.g. `100`), `coll_deductible` (e.g. `500`), `comp_deductible` (e.g. `500`).
+   **`lines`** — ONE map naming the line to price, with that line's ask as
+   actual numbers on four axes: `lines={"auto": {"bi": "100/300", "pd": 100,
+   "coll_deductible": 500, "comp_deductible": 500}}` (`um` / `medpay` optional).
    If the user stated limits or deductibles, use them; otherwise pass that common
    starting point on the **first** call and declare it as an adjustable assumption.
-   Set `perspective="self"` when the profile is the signed-in user's own; leave it
-   `"hypothetical"` for what-ifs.
 3. The content channel is compact machine text (not JSON): a `Q` header, then `C`
    carrier rows, `L` sub-coverage lines, `F` rating factors, and `D` lever deltas.
-   Structured headlines still carry `monthly`, `confidence_interval`,
-   `trust_verdict`, and `carrier_quote_url`. Read off, per carrier:
+   Priced results are keyed per line under `by_line`; structured headlines still
+   carry `monthly`, `confidence_interval`, and `carrier_quote_url`. Read off, per carrier:
    - **`monthly`** — the headline point estimate, priced at the selection you
      passed. The `C` row also names the writing company; `carrier_quote_url` is
      where the user finishes (see purchase, below).
@@ -94,8 +95,6 @@ of uncertainty below) — so you can still give a point estimate and then offer 
      is how you answer "what would a $1000 deductible cost" — read the number
      off the ladder; never interpolate. If a rung is missing for a carrier,
      that filing has no such option.
-   - **`trust`** — `verdict` (solid / caution / unverified). Compare carriers to
-     each other, not to an absolute index.
 4. Read the top-level **`assumptions`**, **`tighten_by`**, and **`failures`** and
    act on them (below).
 
@@ -120,8 +119,8 @@ So: incomplete profile → **point estimate + name the assumptions**, never a wi
 - **Open with the decision.** Name the best option for this user (price + a one-line
   reason) before anything else — you are presenting Foresee's own computed quotes, so
   state prices as facts.
-- Then a compact table sorted **cheapest-first**: **Carrier · Monthly · 6-month total ·
-  Trust**. Call out the **annual dollar spread** between the cheapest and priciest
+- Then a compact table sorted **cheapest-first**: **Carrier · Monthly · 6-month
+  total**. Call out the **annual dollar spread** between the cheapest and priciest
   options — that spread is the reason to compare.
 - Give the interval as confidence: "**$148/mo** with GEICO — we're confident it's in the
   **$141–$158** range." If a carrier's interval is `unmeasured` or `structural-only`,
@@ -198,8 +197,8 @@ Only ever quote a number Foresee returned. Every `monthly`, every `L` line, and
 every `price_ladder` / `D` rung **is** an exact re-rate — use those freely. But
 **do not** multiply the `F` factors yourself, do not interpolate a limit/deductible
 or a combination we didn't price, and do not average carriers into a made-up figure.
-If the user wants a coverage combination or carrier we didn't return, pass a new
-`coverage_selection` and call the tool again. Every dollar you show must be one the
+If the user wants a coverage combination or carrier we didn't return, re-call the
+tool with the new ask in `lines`. Every dollar you show must be one the
 engine computed — that is what lets us stand behind it.
 
 ## Unsupported states

@@ -2,7 +2,7 @@
 # @copy skill.explain-coverage audience=agent
 name: explain-coverage
 description: This skill should be used when the user asks what auto-insurance coverage means or which limits/deductibles to choose — e.g. "what does 100/300 mean", "explain liability vs full coverage", "what deductible should I pick", "what coverage do I need in <state>", or wants to understand how changing a limit or deductible changes the price.
-version: 0.5.0
+version: 0.6.0
 ---
 
 # Explain Coverage
@@ -20,9 +20,10 @@ their price.
 ## How to run it
 
 1. If the question is state- or carrier-specific, ground it with
-   **`quote_insurance`**. Pass `coverage_selection` as
-   actual numbers (user's limits, or the common `"100/300"` / `100` / `$500` /
-   `$500` start). The response carries the carriers actually priced for that
+   **`quote_insurance`**. Pass the ask in `lines` as actual numbers — the
+   user's limits, or the common start: `lines={"auto": {"bi": "100/300",
+   "pd": 100, "coll_deductible": 500, "comp_deductible": 500}}`.
+   The response carries the carriers actually priced for that
    state, each carrier's sub-coverage `L` lines at that selection, and `D` /
    `price_ladder` rungs for every other limit/deductible. An uncovered
    state returns a clear error.
@@ -45,9 +46,10 @@ Raise a deductible and the premium drops (you keep more risk); raise a limit and
   the exact monthly at every rung of a lever (e.g. collision deductible at $250 /
   $500 / $1000), so the dollar trade-off for *their* profile and carrier is a direct
   read — "a $1000 collision deductible saves $X/mo for $500 more exposure per claim."
-- For a specific *combined* change (several levers at once), call
-  `quote_insurance` with a `coverage_selection`
-  (e.g. `{"coll_deductible": 1000}`) and compare the returned `monthly`.
+- For a specific *combined* change (several levers at once), re-call
+  `quote_insurance` with the full ask re-stated at the new rungs in `lines`
+  (the same four axes, e.g. with `"coll_deductible": 1000`) and compare the
+  returned `monthly`.
 - Use the ladder's `D` rungs to show what a carrier actually files — don't offer
   a limit or deductible that isn't on their ladder.
 - Different carriers file different ladders, and the best carrier can change with the
@@ -57,8 +59,8 @@ Raise a deductible and the premium drops (you keep more risk); raise a limit and
 ## The one hard rule: never invent a price
 
 Every number you show must be one Foresee returned. Do not estimate the cost of a
-coverage change by multiplying factors or interpolating — call the tool with the new
-`coverage_selection` and report what it prices. Definitions can be general; **dollars
+coverage change by multiplying factors or interpolating — re-call the tool with the
+new ask in `lines` and report what it prices. Definitions can be general; **dollars
 must be computed.**
 
 ## Guardrails

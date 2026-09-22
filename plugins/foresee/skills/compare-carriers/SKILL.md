@@ -2,7 +2,7 @@
 # @copy skill.compare-carriers audience=agent
 name: compare-carriers
 description: This skill should be used when the user wants to compare personal lines insurance carriers, shop around, or find the right insurance — e.g. "compare car insurance companies", "who is cheapest for me", "is GEICO or Progressive cheaper", "should I switch from State Farm".
-version: 0.6.0
+version: 0.7.0
 ---
 
 # Compare Carriers
@@ -25,12 +25,13 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
    `csaa`, `farmers`, `usaa`). Otherwise omit it to compare everything available in
    that state.
 3. Call **`quote_insurance`** for the instant per-carrier estimate.
-   Pass **`coverage_selection`** as actual numbers (`bi`, `pd`,
-   `coll_deductible`, `comp_deductible`). If the user didn't specify limits, pass
-   the common starting point (`"100/300"`, `100`, `500`, `500`) on the first call
+   Pass **`lines`** — ONE map naming the line with its ask as actual numbers:
+   `lines={"auto": {"bi": "100/300", "pd": 100, "coll_deductible": 500,
+   "comp_deductible": 500}}`. If the user didn't specify limits, pass
+   that common starting point on the first call
    and declare it. Each carrier comes back with `monthly`, a `confidence_interval`,
    sub-coverage `L` lines at that selection, `D` / `price_ladder` deltas for every
-   rung of each lever, a `trust` verdict, and `carrier_quote_url`. An
+   rung of each lever, and `carrier_quote_url`. An
    uncovered state returns a clear error naming the live states. The response
    carries top-level `assumptions`, `tighten_by`, and `failures`.
 4. When the user wants proven numbers or is ready to buy, offer live quotes:
@@ -47,15 +48,12 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
 ## Presenting results
 
 - **Rank by the point-estimate `monthly`**, cheapest first.
-- Show a compact table: **Carrier · Monthly · 6-month total · Trust** (plus the
+- Show a compact table: **Carrier · Monthly · 6-month total** (plus the
   confidence interval when it matters). Call out the annual dollar spread between the
   cheapest and priciest options — that spread is the reason to compare.
 - **Ties within the interval are noise.** If two carriers' point estimates fall inside
   each other's `confidence_interval`, say they're effectively tied rather than
   declaring a $3/mo "winner".
-- Read `trust.verdict` (solid / caution / unverified) against the top-level
-  `trust_methodology`: complaint indexes are relative, so compare carriers to each
-  other, not to 1.0.
 - Include any `failures` (carriers that couldn't be priced for this profile/state)
   rather than silently dropping them.
 
@@ -70,9 +68,9 @@ wants to trade coverage for price.
   monthly at every rung of each lever, so "who's cheapest at a $1000 deductible?"
   is a direct read across carriers — no extra calls, no interpolation.
 - **Re-price an explicit combined selection** when the user pins several levers at once:
-  pass `coverage_selection` (e.g. `{"bi": "100/300", "coll_deductible": 1000,
-  "comp_deductible": 1000}`) and every carrier re-prices at that exact rung. Compare the
-  resulting `monthly` values.
+  re-call with the full ask at the new rungs — `lines={"auto": {"bi": "100/300",
+  "pd": 100, "coll_deductible": 1000, "comp_deductible": 1000}}` — and every carrier
+  re-prices at that exact rung. Compare the resulting `monthly` values.
 - This is how you surface statements like *"Liberty Mutual is cheapest at a low
   deductible, but you want a high one, so GEICO wins for you."*
 - **Missing rungs.** Carriers have different ladders. If a requested rung
