@@ -2,7 +2,7 @@
 # @copy skill.quote-insurance audience=agent
 name: quote-insurance
 description: This skill should be used when the user wants a personal lines (especially home and auto) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my auto insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle details and asks for a price. Gathers the minimum profile conversationally and returns carrier quotes, with optional live confirmation from the carriers' own sites.
-version: 0.7.1
+version: 0.7.2
 ---
 
 # Quote Insurance
@@ -176,8 +176,7 @@ Commissioning requires consent:
 3. Collect the `identity` fields in chat (name, DOB, street address, email — never an
    SSN, which no carrier flow needs; a driver's-license number only when a
    carrier's form asks for it, handled like the name and address).
-   They may be omitted only when the user is signed in on the Foresee site with a
-   saved profile. A `missing_facts` response is normal — carrier forms
+   A `missing_facts` response is normal — carrier forms
    insist on facts Foresee won't invent (body style, purchase date, age first
    licensed…); ask the user for exactly the `needs` listed and call again.
 
