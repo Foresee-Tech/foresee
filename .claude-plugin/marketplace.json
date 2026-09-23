@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "foresee",
-      "description": "Shop for home and auto insurance with live carrier quotes. Instant filing-based estimates plus Foresee agents that complete the carriers' own quote flows — with the user's explicit consent — and read back the real page premium.",
+      "description": "Shop for home and auto insurance with live carrier quotes. Instant quote estimates plus Foresee agents that complete the carriers' own quote flows — with the user's explicit consent — and read back the real page premium.",
       "author": {
         "name": "Foresee"
       },

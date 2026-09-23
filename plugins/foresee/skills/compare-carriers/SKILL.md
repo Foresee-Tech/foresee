@@ -74,7 +74,7 @@ wants to trade coverage for price.
 - This is how you surface statements like *"Liberty Mutual is cheapest at a low
   deductible, but you want a high one, so GEICO wins for you."*
 - **Missing rungs.** Carriers have different ladders. If a requested rung
-  isn't in that carrier's `D` / `price_ladder`, the filing has no such option —
+  isn't in that carrier's `D` / `price_ladder`, the carrier has no such option —
   say so rather than interpolating or implying they were priced at the same rung.
 - Stay on each carrier's ladder (`D` / `price_ladder` rungs) rather than
   requesting a level that doesn't exist.
@@ -94,7 +94,7 @@ server prices it. This is what keeps "every number is validated" true.
   priced and why.
 - USAA is military-affiliated only — flag that if it appears and the user isn't
   eligible.
-- The instant quote is a filing-based estimate, **not a bindable quote**; when the user
+- The instant quote is a computed estimate, **not a bindable quote**; when the user
   wants to buy, hand off to the carrier with its `carrier_quote_url`. See the
   `quote-insurance` skill for the full hand-off detail.
 - If the user's state isn't covered, the tool returns a clear "no coverage yet"

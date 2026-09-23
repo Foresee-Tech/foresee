@@ -24,7 +24,7 @@ Everything below describes the live auto flow.
 Foresee is a two-part system, and the trust comes from how they fit together:
 
 1. **Deterministic rate engines (instant).** `quote_insurance` runs each
-   carrier's *filed rate manual* against the profile and returns an exact computed
+   carrier's own rating rules against the profile and returns an exact computed
    premium per carrier — with a full sub-coverage breakdown and a price ladder — in one
    call. This is the headline answer and the default path.
 2. **Live carrier agents.** Foresee agents drive the carriers' own quoting websites
@@ -69,7 +69,7 @@ of uncertainty below) — so you can still give a point estimate and then offer 
    exact field names: the core carries `zip_code` and `age` (or `dob`), the
    `auto` block carries `vehicles[]` (year/make/model) and `drivers[]`, and
    prior coverage rides `prior_insurance`. This is the
-   instant rate-engine tool: one exact filing-based run per carrier. Pass
+   instant rate-engine tool: one exact rate-engine run per carrier. Pass
    **`lines`** — ONE map naming the line to price, with that line's ask as
    actual numbers on four axes: `lines={"auto": {"bi": "100/300", "pd": 100,
    "coll_deductible": 500, "comp_deductible": 500}}` (`um` / `medpay` optional).
@@ -94,7 +94,7 @@ of uncertainty below) — so you can still give a point estimate and then offer 
      rung, one lever moved at a time (`new monthly = monthly + D delta`). This
      is how you answer "what would a $1000 deductible cost" — read the number
      off the ladder; never interpolate. If a rung is missing for a carrier,
-     that filing has no such option.
+     that carrier has no such option.
 4. Read the top-level **`assumptions`**, **`tighten_by`**, and **`failures`** and
    act on them (below).
 
@@ -129,7 +129,7 @@ So: incomplete profile → **point estimate + name the assumptions**, never a wi
   I can narrow that."
 - Surface `failures` (e.g. USAA when the user isn't military-affiliated) rather than
   silently dropping carriers.
-- The instant quote is a filing-based estimate, **not a bindable quote**. End on the
+- The instant quote is a computed estimate, **not a bindable quote**. End on the
   next concrete action — usually the recommended carrier's quoting-portal link, or
   an offer to confirm live (below).
 - Offer the `price_ladder` / sub-coverage detail or a coverage change (see
