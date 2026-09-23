@@ -2,7 +2,7 @@
 # @copy skill.quote-insurance audience=agent
 name: quote-insurance
 description: This skill should be used when the user wants a personal lines (especially home and auto) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my auto insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle details and asks for a price. Gathers the minimum profile conversationally and returns carrier quotes, with optional live confirmation from the carriers' own sites.
-version: 0.7.0
+version: 0.7.1
 ---
 
 # Quote Insurance
@@ -13,11 +13,11 @@ Foresee does not monetise by selling ads or leads.
 
 ## Scope — auto only for now
 
-Foresee estimates **auto insurance** today; home and other lines are coming soon. This
-is the one disclaimer to give: if the user asks about a line that isn't live yet (home,
-condo, renters, etc.), say so plainly in a single sentence, then offer an auto quote if
-it's relevant — once, not repeated over and over.
-Everything below describes the live auto flow.
+Foresee quotes the lines and states it currently serves — **California auto is live
+today**. This is the one disclaimer to give: if the user asks about a line that isn't
+live yet (home, condo, renters, etc.), say so plainly in a single sentence, then offer
+an auto quote if it's relevant — once, not repeated over and over.
+Everything below describes the live flow.
 
 ## How Foresee works — two parts
 
@@ -145,10 +145,17 @@ user's real PII, the consent disclosure below is what makes the submission their
 authorize.
 
 - **`live_carrier_quotes`** — the live-walk tool. IDEMPOTENT, keyed on profile +
-  the ask. `lines` names WHICH line to walk, exactly one per call — e.g.
-  `{"auto": {...the ask...}}`. An auto walk's ask is required (the same four
-  axes as the instant tool); without it the tool answers with the
-  selection-required message — ask the user, then call again.
+  the ask. `lines` names the lines to walk: `{"auto": {...the ask...}}`,
+  `{"home": null}`, or several at once — `{"auto": {...}, "renters": {...}}`
+  commissions bundled walks: each carrier that writes all the named lines is
+  driven through its own multi-line quote flow and reports per-line premiums
+  plus the carrier's own bundle total; a carrier writing only some of them is
+  walked for those alone. Walks cover the lines and states Foresee currently
+  serves (California auto today), so a single-line auto walk is the common
+  case. An auto or renters walk's ask is required (the same axes as the
+  instant tool); without it the tool answers with the selection-required
+  message — ask the user, then call again; a home walk takes `{"home": null}`
+  — the carrier's own form prices its package.
   The first call commissions the walks; calling again with the SAME arguments
   collects progress and results instead of re-submitting. A profile that has
   already been walked returns those results — the carriers are never asked twice.
@@ -166,8 +173,9 @@ Commissioning requires consent:
 2. Get their explicit go-ahead and pass it **verbatim** as `user_authorization`
    (e.g. "yes, go ahead"). That affirmation is stored as the durable consent record
    for the dispatch.
-3. Collect the `identity` fields in chat (name, DOB, street address, email — never
-   SSN or a driver's license number; no supported carrier flow needs them to quote).
+3. Collect the `identity` fields in chat (name, DOB, street address, email — never an
+   SSN, which no carrier flow needs; a driver's-license number only when a
+   carrier's form asks for it, handled like the name and address).
    They may be omitted only when the user is signed in on the Foresee site with a
    saved profile. A `missing_facts` response is normal — carrier forms
    insist on facts Foresee won't invent (body style, purchase date, age first
