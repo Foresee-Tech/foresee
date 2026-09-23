@@ -6,7 +6,7 @@
 Foresee enables AI to shop for home and auto insurance. 
 Foresee returns accurate quote estimates from every insurance carrier, so that your AI can help you make the right decision for you and your finances.
 Foresee provides full, free and detailed quote information across the entire market - from household names like State Farm, Progressive, and Allstate, down to niche and regional carriers that might be a fit for you.
-Your AI will use Foresee to compare coverage options across carriers, quoting instantly, and taking into account reputation and claims handling service, working to find the right answer for you. 
+Your AI will use Foresee to compare coverage options across carriers, quoting instantly, working to find the right answer for you. 
 
 *"How much would auto insurance cost for a 25 year old driving a 2022 Camry in Sacramento?"*
 *"Do I need a high deductible? Which insurer is best for premium coverage?"*
@@ -49,7 +49,7 @@ https://agents.go-foresee.com/mcp
 
 ### Tools
 
-- **`quote_insurance`** — instant, filing-based quote estimates.
+- **`quote_insurance`** — instant quote estimates.
 - **`live_carrier_quotes`** — Foresee agents complete the carriers' own quote
   flows and read back the real page premium. Runs only with the user's explicit,
   in-chat consent; no sign-in needed.
