@@ -13,9 +13,18 @@ user's explicit, in-chat consent, and no sign-in is needed.
 
 ## Install
 
+Claude Code:
+
 ```bash
 /plugin marketplace add Foresee-Tech/foresee
 /plugin install foresee@foresee
+```
+
+Hermes:
+
+```bash
+hermes plugins install foresee
+hermes plugins enable foresee
 ```
 
 Or point any MCP client at:
