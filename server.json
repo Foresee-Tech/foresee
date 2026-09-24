@@ -1,8 +1,8 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.foresee-tech/foresee",
+  "name": "io.github.Foresee-Tech/foresee",
   "title": "Foresee",
-  "description": "Shop for home and auto insurance with live carrier quotes. Instant quote estimates plus Foresee agents that complete the carriers' own quote flows — with the user's explicit consent — and read back the real page premium.",
+  "description": "Let AI assistants shop for home and auto insurance: compare instant quotes across every carrier.",
   "version": "1.0.0",
   "websiteUrl": "https://go-foresee.com",
   "repository": {
