@@ -1,0 +1,17 @@
+{
+  "id": "foresee",
+  "name": "Foresee",
+  "description": "Shop for home and auto insurance with live carrier quotes. Instant quote estimates plus Foresee agents that complete the carriers' own quote flows — with the user's explicit consent — and read back the real page premium.",
+  "version": "0.4.2",
+  "categories": [
+    "finance-payments"
+  ],
+  "skills": [
+    "skills"
+  ],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  }
+}

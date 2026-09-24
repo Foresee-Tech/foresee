@@ -59,6 +59,8 @@ ATTR_RE = re.compile(r"([A-Za-z][\w-]*)\s*=\s*(\S+)")
 REQUIRED_JSON = (
     "plugins/foresee/plugin.json",
     "plugins/foresee/.claude-plugin/plugin.json",
+    "plugins/foresee/openclaw.plugin.json",
+    "plugins/foresee/package.json",
     ".claude-plugin/marketplace.json",
     "server.json",
 )
