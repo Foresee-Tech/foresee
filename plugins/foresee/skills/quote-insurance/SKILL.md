@@ -2,7 +2,7 @@
 # @copy skill.quote-insurance audience=agent
 name: quote-insurance
 description: This skill should be used when the user wants a personal lines (home, auto, or renters) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my renters insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle/home details and asks for a price. Gathers the minimum profile conversationally and returns carrier quote estimates, with optional live confirmation from the carriers' own sites.
-version: 0.8.0
+version: 0.8.1
 ---
 
 # Quote Insurance
@@ -52,8 +52,11 @@ conversationally, never demand it:
 - **Driving record** — per driver, `auto.drivers[].accidents` / `violations` as lists
   of structured objects (an empty list is a clean record).
 - `marital_status`, `gender`, `credit_range`, `home_ownership_status`,
-  `prior_insurance` (insurance for the same line), `companion_policies` (insurance
-  for a different line).
+  `prior_insurance` (insurance for the same line).
+- `companion_policies` — other policies the household already holds, each with the
+  carrier that writes it: `{"line": "home", "carrier": "State Farm"}`. Only that
+  carrier's multi-policy discount applies, so ask who writes the policy. Without a
+  carrier, no discount applies and the quote asks for one under `tighten_by`.
 - `military_affiliation` — USAA sells only to military members, veterans, and their
   families; ask when it might apply.
 - **Home / renters** — the `property` block (`year_built`, `construction_type`,
