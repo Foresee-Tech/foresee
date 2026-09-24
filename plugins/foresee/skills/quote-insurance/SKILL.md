@@ -74,7 +74,8 @@ and sharpen it after.
    first. Only when most are missing, ask **one** round of 2–4 short questions, then
    call once.
 2. Call **`quote_insurance`** with `profile` (exact field names: core `zip_code`,
-   `age`/`dob`; `auto.vehicles[]`, `auto.drivers[]`; `property`) and **`lines`** —
+   `age`/`dob`; `auto.vehicles[]`, `auto.drivers[]`; `property`; any held policies as
+   `companion_policies: [{"line", "carrier"}]`) and **`lines`** —
    keys are the lines to price, values are that line's coverage options as actual
    numbers. Nothing is priced at a server default: the options you pass are the ones
    priced.
