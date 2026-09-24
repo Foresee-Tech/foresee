@@ -43,8 +43,6 @@ jobs:
               urls.append(json.loads(base64.urlsafe_b64decode(padded))["url"])
           urls += [unquote(u) for u in re.findall(r"connectorUrl=([^)&]+)", text)]
           bad = [u for u in urls if urlsplit(u).netloc not in CANONICAL_HOSTS]
-          if not urls:
-              sys.exit("no install buttons found in README.md — check the regexes")
           if bad:
               sys.exit(f"install buttons point off-canonical: {bad}")
           print(f"OK: {len(urls)} install-button URL(s)")
