@@ -27,6 +27,12 @@ hermes plugins install foresee
 hermes plugins enable foresee
 ```
 
+OpenClaw:
+
+```bash
+openclaw plugins install clawhub:@foresee-tech/foresee
+```
+
 Or point any MCP client at:
 
 ```
