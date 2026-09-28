@@ -2,7 +2,7 @@
 # @copy skill.compare-carriers audience=agent
 name: compare-carriers
 description: This skill should be used when the user wants to compare personal lines insurance carriers, shop around, or find the right insurance — e.g. "compare car insurance companies", "who is cheapest for me", "is GEICO or Progressive cheaper", "should I switch from State Farm".
-version: 0.8.2
+version: 0.8.3
 ---
 
 # Compare Carriers
