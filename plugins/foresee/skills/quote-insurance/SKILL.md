@@ -2,7 +2,7 @@
 # @copy skill.quote-insurance audience=agent
 name: quote-insurance
 description: This skill should be used when the user wants a personal lines (home, auto, or renters) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my renters insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle/home details and asks for a price. Gathers the minimum profile conversationally and returns carrier quote estimates, with optional live confirmation from the carriers' own sites.
-version: 0.8.1
+version: 0.8.2
 ---
 
 # Quote Insurance
@@ -101,7 +101,7 @@ and sharpen it after.
    | `assumptions:` | What Foresee assumed; `high_impact: true` materially moves the estimate |
    | `tighten_by:` | The missing facts that would most move the price |
    | `not_priced:` | Carriers excluded, with the reason |
-   | `C` | Carrier, writing entity, monthly point estimate, and `ci lo-hi` |
+   | `C` | Carrier, writing entity, monthly point estimate, `ci lo-hi`, and `rated` when the price is for a different rung than asked: `rated bi=30/60(asked 100/300,less)` |
    | `W` | Warning on the carrier above — e.g. "Does not write state minimum BI / PD" |
    | `L` | Monthly cost per coverage or peril |
    | `F` | One rating factor; values align with the `L` codes. Suffix: none = exact, `~` = derived, `?` = estimated |
@@ -109,7 +109,9 @@ and sharpen it after.
    | `B` | Bundle: carrier, bundled $/mo, standalone $/mo, savings |
 
    structuredContent carries the headline per line under `by_line` (`carriers[]` with
-   `monthly`, `confidence_interval`, `carrier_quote_url`, `warnings`; plus
+   `monthly`, `confidence_interval`, `carrier_quote_url`, `warnings`, and
+   `rated_vs_asked` rows — `axis`, `asked`, `rated`, `coverage` — the same facts as
+   `rated`; plus
    `assumptions`, `tighten_by`, `failures`), and `bundle` / `skipped` at the top.
 
 ## The two kinds of uncertainty — keep them separate
@@ -136,6 +138,14 @@ So: incomplete profile → **point estimate + name the assumptions**, never a wi
   between cheapest and priciest — that spread is the reason to compare.
 - These are Foresee's **estimates** of what each carrier will charge — say so, and
   let `assumptions` / `tighten_by` explain how they were made and how to sharpen them.
+- **A price at a different rung.** `rated` on a `C` row (`rated_vs_asked` in
+  structuredContent) means the carrier doesn't offer the limit or deductible asked,
+  and the price is for the nearest one it does offer. Put the rated limits beside
+  that price every time you show it ("$164/mo — 30/60 BI / $25k PD, the most this
+  carrier offers, not the 100/300 / $100k you asked for"), and say plainly when it
+  covers `less`. It is not like-for-like: never lead with it as the best option
+  without saying so, and compute the spread over like-for-like carriers (or say
+  which it includes). Offer to re-price everyone at that rung.
 - Relay every `W` warning and every `not_priced` carrier with its reason (e.g. USAA
   for a household that isn't military-affiliated) — a carrier never silently vanishes.
 - **Bundles:** a `B` row's per-line prices assume every bundled line is placed with
