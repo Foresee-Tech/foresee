@@ -103,7 +103,7 @@ and sharpen it after.
    | `tighten_by:` | The missing facts that would most move the price |
    | `not_priced:` | Carriers excluded, with the reason |
    | `C` | Carrier, writing entity, monthly point estimate, `ci lo-hi`, and `rated` when the price is for a different rung than asked: `rated bi=30/60(asked 100/300,less)` |
-   | `W` | Warning on the carrier above — e.g. "no direct online quote path" |
+   | `W` | A note on the carrier above, e.g. no online quote page |
    | `L` | Monthly cost per coverage or peril |
    | `F` | One rating factor; values align with the `L` codes. Suffix: none = exact, `~` = derived, `?` = estimated |
    | `D` | Price ladder: every offered rung of a lever as ±$/mo vs the quoted monthly, everything else held |
