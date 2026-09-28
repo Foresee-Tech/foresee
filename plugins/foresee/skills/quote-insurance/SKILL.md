@@ -50,7 +50,8 @@ Everything else is optional and improves the estimate — collect what you can
 conversationally, never demand it:
 
 - **Driving record** — per driver, `auto.drivers[].accidents` / `violations` as lists
-  of structured objects (an empty list is a clean record).
+  of dated entries: `{"on": "2025-01", "kind": "speeding"}` (an empty list is a clean
+  record).
 - `marital_status`, `gender`, `credit_range`, `home_ownership_status`,
   `prior_insurance` (insurance for the same line).
 - `companion_policies` — other policies the household already holds, each with the
@@ -132,8 +133,7 @@ and sharpen it after.
   because the profile was thin.
 - **`assumptions` / `tighten_by` = reducible.** Fields the user didn't give. Still
   give the point estimate; then name the one or two `tighten_by` facts that would
-  sharpen it and offer to re-quote with the answers, sent under the matching
-  assumption's `path`.
+  sharpen it and offer to re-quote with the answers, each sent under its `field`.
 
 So: incomplete profile → **point estimate + name the assumptions**, never a wider range.
 
