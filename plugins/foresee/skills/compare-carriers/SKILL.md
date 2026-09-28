@@ -2,7 +2,7 @@
 # @copy skill.compare-carriers audience=agent
 name: compare-carriers
 description: This skill should be used when the user wants to compare personal lines insurance carriers, shop around, or find the right insurance — e.g. "compare car insurance companies", "who is cheapest for me", "is GEICO or Progressive cheaper", "should I switch from State Farm".
-version: 0.8.1
+version: 0.8.2
 ---
 
 # Compare Carriers
@@ -78,8 +78,9 @@ collision deductible may not be cheapest at $1000, and limits behave the same wa
 ## Bundles
 
 Pass several keys in `lines` (e.g. `{"auto": {...}, "renters": {...}}`) to price a
-bundle. A `B` row gives a carrier's bundled $/mo, standalone $/mo, and savings; its
-per-line prices assume every bundled line is placed with that carrier. For a
+bundle. The result's `bundle` gives each carrier's `bundle_total`, `standalone_total`
+and `savings` ($/mo); its per-line prices assume every bundled line is placed with
+that carrier. For a
 cross-carrier mix (auto with one, renters with another), compare standalone totals.
 
 ## The one hard rule: never invent a price
