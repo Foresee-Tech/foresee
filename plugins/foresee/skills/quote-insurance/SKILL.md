@@ -93,7 +93,7 @@ and sharpen it after.
    (`{"auto": {...}, "renters": {...}}`) price a bundle.
 3. Read the result. Everything is in structuredContent; `content` is empty on a
    priced result. The rating detail is `dense`: compact machine text, one section
-   per line, with a self-describing legend:
+   per line:
 
    | Prefix | Meaning |
    |---|---|
@@ -103,7 +103,7 @@ and sharpen it after.
    | `tighten_by:` | The missing facts that would most move the price |
    | `not_priced:` | Carriers excluded, with the reason |
    | `C` | Carrier, writing entity, monthly point estimate, `ci lo-hi`, and `rated` when the price is for a different rung than asked: `rated bi=30/60(asked 100/300,less)` |
-   | `W` | Warning on the carrier above — e.g. "Does not write state minimum BI / PD" |
+   | `W` | Warning on the carrier above — e.g. "no direct online quote path" |
    | `L` | Monthly cost per coverage or peril |
    | `F` | One rating factor; values align with the `L` codes. Suffix: none = exact, `~` = derived, `?` = estimated |
    | `D` | Price ladder: every offered rung of a lever as ±$/mo vs the quoted monthly, everything else held |
@@ -207,9 +207,6 @@ re-submitted, and a profile already walked returns those results. Read:
   `breakdown`, `bound`, `variants`, `quote_number`.
 - `declined: true` — the carrier reviewed the details and refused to quote. **An
   answer, not an error** — relay it.
-- `confirmation` — per carrier, the instant estimate beside the page-printed premium
-  (the bundle estimate when several lines were walked). Present the two side by side
-  with the delta.
 - `skipped` / `not_dispatched` — carriers not walked, each with the reason. Relay them.
 - `assumptions` — minor form facts the walks answered with declared no-claim values
   (`field` + `assumed`). Relay every one; if the user corrects one, re-call with the

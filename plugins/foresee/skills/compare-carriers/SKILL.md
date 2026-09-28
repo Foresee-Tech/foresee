@@ -34,8 +34,7 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
    back under `skipped` — relay it.
 4. When the user wants to confirm the estimates with the carriers, offer
    **`live_carrier_quotes`** (agents server only): Foresee's agents complete the
-   carriers' own quote flows and read back the page-printed premium, with a
-   `confirmation` block beside the estimate. Consent comes first — see the
+   carriers' own quote flows and read back the page-printed premium. Consent comes first — see the
    `quote-insurance` skill for the disclosure and the verbatim `user_authorization`.
    Re-call with the same arguments to collect; fold completed quotes into the
    comparison and call out anything now cheaper than the previous best. A carrier

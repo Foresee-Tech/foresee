@@ -90,7 +90,7 @@ must come from Foresee.**
 
 ## Guardrails
 
-- A `W` warning like "Does not write state minimum BI / PD" means that carrier
-  doesn't offer the asked limit — relay it. If you're unsure of a state's legal
+- A `C` row with `rated` means that carrier doesn't offer the asked limit — relay
+  it. If you're unsure of a state's legal
   minimum, say so rather than stating a number you can't verify.
 - Keep it practical and short.
