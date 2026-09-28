@@ -2,7 +2,7 @@
 # @copy skill.quote-insurance audience=agent
 name: quote-insurance
 description: This skill should be used when the user wants a personal lines (home, auto, or renters) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my renters insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle/home details and asks for a price. Gathers the minimum profile conversationally and returns carrier quote estimates, with optional live confirmation from the carriers' own sites.
-version: 0.8.4
+version: 0.8.5
 ---
 
 # Quote Insurance
@@ -50,7 +50,8 @@ Everything else is optional and improves the estimate — collect what you can
 conversationally, never demand it:
 
 - **Driving record** — per driver, `auto.drivers[].accidents` / `violations` as lists
-  of structured objects (an empty list is a clean record).
+  of dated entries: `{"on": "2025-01", "kind": "speeding"}` (an empty list is a clean
+  record).
 - `marital_status`, `gender`, `credit_range`, `home_ownership_status`,
   `prior_insurance` (insurance for the same line).
 - `companion_policies` — other policies the household already holds, each with the
@@ -133,8 +134,7 @@ and sharpen it after.
   because the profile was thin.
 - **`assumptions` / `tighten_by` = reducible.** Fields the user didn't give. Still
   give the point estimate; then name the one or two `tighten_by` facts that would
-  sharpen it and offer to re-quote with the answers, sent under the matching
-  assumption's `path`.
+  sharpen it and offer to re-quote with the answers, each sent under its `field`.
 
 So: incomplete profile → **point estimate + name the assumptions**, never a wider range.
 
