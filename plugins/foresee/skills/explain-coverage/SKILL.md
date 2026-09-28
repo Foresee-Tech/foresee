@@ -2,7 +2,7 @@
 # @copy skill.explain-coverage audience=agent
 name: explain-coverage
 description: This skill should be used when the user asks what home, auto, or renters insurance coverage means or which limits/deductibles to choose — e.g. "what does 100/300 mean", "explain liability vs full coverage", "what deductible should I pick", "what is coverage A", "what coverage do I need in <state>", or wants to understand how changing a limit or deductible changes the price.
-version: 0.7.0
+version: 0.7.1
 ---
 
 # Explain Coverage
@@ -90,7 +90,7 @@ must come from Foresee.**
 
 ## Guardrails
 
-- A `W` warning like "Does not write state minimum BI / PD" means that carrier
-  doesn't offer the asked limit — relay it. If you're unsure of a state's legal
+- A `C` row with `rated` means that carrier doesn't offer the asked limit — relay
+  it. If you're unsure of a state's legal
   minimum, say so rather than stating a number you can't verify.
 - Keep it practical and short.

@@ -2,7 +2,7 @@
 # @copy skill.quote-insurance audience=agent
 name: quote-insurance
 description: This skill should be used when the user wants a personal lines (home, auto, or renters) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my renters insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle/home details and asks for a price. Gathers the minimum profile conversationally and returns carrier quote estimates, with optional live confirmation from the carriers' own sites.
-version: 0.8.3
+version: 0.8.4
 ---
 
 # Quote Insurance
@@ -100,28 +100,29 @@ and sharpen it after.
      otherwise pass `400000` and say it's a stand-in — the first number to correct.
 
    Several keys at once (`{"auto": {...}, "renters": {...}}`) price a bundle.
-3. Read the result. The content channel is compact machine text, one section per
-   line, with a self-describing legend:
+3. Read the result. Everything is in structuredContent; `content` is empty on a
+   priced result. The rating detail is `dense`: compact machine text, one section
+   per line:
 
    | Prefix | Meaning |
    |---|---|
    | `Q` | What was priced: state, line, coverage selection (`sel`) |
-   | `format:` `factors:` | Legend for everything below |
+   | `factors:` | Names the `f0`, `f1`… ids the `F` rows use |
    | `assumptions:` | What Foresee assumed; `high_impact: true` materially moves the estimate |
    | `tighten_by:` | The missing facts that would most move the price |
    | `not_priced:` | Carriers excluded, with the reason |
    | `C` | Carrier, writing entity, monthly point estimate, `ci lo-hi`, and `rated` when the price is for a different rung than asked: `rated bi=30/60(asked 100/300,less)` |
-   | `W` | Warning on the carrier above — e.g. "Does not write state minimum BI / PD" |
+   | `W` | A note on the carrier above, e.g. no online quote page |
    | `L` | Monthly cost per coverage or peril |
    | `F` | One rating factor; values align with the `L` codes. Suffix: none = exact, `~` = derived, `?` = estimated |
    | `D` | Price ladder: every offered rung of a lever as ±$/mo vs the quoted monthly, everything else held |
-   | `B` | Bundle: carrier, bundled $/mo, standalone $/mo, savings |
 
-   structuredContent carries the headline per line under `by_line` (`carriers[]` with
-   `monthly`, `confidence_interval`, `carrier_quote_url`, `warnings`, and
-   `rated_vs_asked` rows — `axis`, `asked`, `rated`, `coverage` — the same facts as
-   `rated`; plus
-   `assumptions`, `tighten_by`, `failures`), and `bundle` / `skipped` at the top.
+   Beside `dense`, structuredContent carries the headline per line under `by_line`
+   (`carriers[]` with `monthly`, `confidence_interval`, `carrier_quote_url`,
+   `warnings`, and `rated_vs_asked` rows — `axis`, `asked`, `rated`, `coverage` — the
+   same facts as `rated`; plus `assumptions`, `tighten_by`, `failures`), and
+   `presentation`, `bundle` and `skipped` at the top. Refusals and errors
+   (`profile_required`, `coverage_required`) are JSON with no `dense`.
 
 ## The two kinds of uncertainty — keep them separate
 
@@ -156,8 +157,9 @@ So: incomplete profile → **point estimate + name the assumptions**, never a wi
   which it includes). Offer to re-price everyone at that rung.
 - Relay every `W` warning and every `not_priced` carrier with its reason (e.g. USAA
   for a household that isn't military-affiliated) — a carrier never silently vanishes.
-- **Bundles:** a `B` row's per-line prices assume every bundled line is placed with
-  that carrier; for a cross-carrier mix, compare standalone totals.
+- **Bundles:** `bundle` gives each carrier's `bundle_total`, `standalone_total` and
+  `savings`; its per-line prices assume every bundled line is placed with that
+  carrier. For a cross-carrier mix, compare standalone totals.
 - End on the next concrete action — the recommended carrier's `carrier_quote_url`, or
   an offer to confirm live (below).
 
@@ -213,9 +215,6 @@ re-submitted, and a profile already walked returns those results. Read:
   `breakdown`, `bound`, `variants`, `quote_number`.
 - `declined: true` — the carrier reviewed the details and refused to quote. **An
   answer, not an error** — relay it.
-- `confirmation` — per carrier, the instant estimate beside the page-printed premium
-  (the bundle estimate when several lines were walked). Present the two side by side
-  with the delta.
 - `skipped` / `not_dispatched` — carriers not walked, each with the reason. Relay them.
 - `assumptions` — minor form facts the walks answered with declared no-claim values
   (`field` + `assumed`). Relay every one; if the user corrects one, re-call with the
