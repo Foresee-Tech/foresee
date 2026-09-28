@@ -26,7 +26,8 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
 3. Call **`quote_insurance`** with `lines` naming each line and its coverage options
    as actual numbers — for auto, the user's limits or the common start:
    `lines={"auto": {"bi": "100/300", "pd": 100, "coll_deductible": 500,
-   "comp_deductible": 500}}`, declared as an adjustable assumption. Each carrier comes
+   "comp_deductible": 500}}`, declared as an adjustable assumption (renters and home:
+   the common starting points in the `quote-insurance` skill). Each carrier comes
    back with a `C` row (monthly point estimate, `ci`, and `rated` when the price is
    for a different rung than asked), `L` per-coverage lines, `D`
    price ladders, any `W` warnings, and `carrier_quote_url`; carriers that couldn't

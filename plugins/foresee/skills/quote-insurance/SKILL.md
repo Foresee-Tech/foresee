@@ -86,11 +86,19 @@ and sharpen it after.
    - **renters**: `coverage_c`, `coverage_e`, `coverage_f`, `deductible`; optional
      `coverage_d`.
 
-   If the user stated limits or deductibles, use them. Otherwise, for auto, pass the
-   common starting point — `lines={"auto": {"bi": "100/300", "pd": 100,
-   "coll_deductible": 500, "comp_deductible": 500}}` — on the **first** call and
-   present it as the adjustable assumption it is. Several keys at once
-   (`{"auto": {...}, "renters": {...}}`) price a bundle.
+   If the user stated limits or deductibles, use them. Otherwise pass the line's
+   common starting point on the **first** call and present it as the adjustable
+   assumption it is:
+   - **auto**: `{"bi": "100/300", "pd": 100, "coll_deductible": 500,
+     "comp_deductible": 500}`
+   - **renters**: `{"coverage_c": 30000, "coverage_e": 100000, "coverage_f": 1000,
+     "deductible": 500}`
+   - **home**: `{"coverage_a": <the dwelling's replacement cost>, "coverage_e":
+     300000, "coverage_f": 1000, "aop_deductible": 1000}`. Use the user's
+     replacement cost when known (also send it as `property.replacement_cost`);
+     otherwise pass `400000` and say it's a stand-in — the first number to correct.
+
+   Several keys at once (`{"auto": {...}, "renters": {...}}`) price a bundle.
 3. Read the result. Everything is in structuredContent; `content` is empty on a
    priced result. The rating detail is `dense`: compact machine text, one section
    per line:
