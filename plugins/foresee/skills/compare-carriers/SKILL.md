@@ -2,7 +2,7 @@
 # @copy skill.compare-carriers audience=agent
 name: compare-carriers
 description: This skill should be used when the user wants to compare personal lines insurance carriers, shop around, or find the right insurance — e.g. "compare car insurance companies", "who is cheapest for me", "is GEICO or Progressive cheaper", "should I switch from State Farm".
-version: 0.8.1
+version: 0.8.2
 ---
 
 # Compare Carriers
@@ -26,7 +26,8 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
 3. Call **`quote_insurance`** with `lines` naming each line and its coverage options
    as actual numbers — for auto, the user's limits or the common start:
    `lines={"auto": {"bi": "100/300", "pd": 100, "coll_deductible": 500,
-   "comp_deductible": 500}}`, declared as an adjustable assumption. Each carrier comes
+   "comp_deductible": 500}}`, declared as an adjustable assumption (renters and home:
+   the common starting points in the `quote-insurance` skill). Each carrier comes
    back with a `C` row (monthly point estimate, `ci`, and `rated` when the price is
    for a different rung than asked), `L` per-coverage lines, `D`
    price ladders, any `W` warnings, and `carrier_quote_url`; carriers that couldn't
