@@ -2,7 +2,7 @@
 # @copy skill.compare-carriers audience=agent
 name: compare-carriers
 description: This skill should be used when the user wants to compare personal lines insurance carriers, shop around, or find the right insurance — e.g. "compare car insurance companies", "who is cheapest for me", "is GEICO or Progressive cheaper", "should I switch from State Farm".
-version: 0.8.0
+version: 0.8.1
 ---
 
 # Compare Carriers
@@ -27,7 +27,8 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
    as actual numbers — for auto, the user's limits or the common start:
    `lines={"auto": {"bi": "100/300", "pd": 100, "coll_deductible": 500,
    "comp_deductible": 500}}`, declared as an adjustable assumption. Each carrier comes
-   back with a `C` row (monthly point estimate and `ci`), `L` per-coverage lines, `D`
+   back with a `C` row (monthly point estimate, `ci`, and `rated` when the price is
+   for a different rung than asked), `L` per-coverage lines, `D`
    price ladders, any `W` warnings, and `carrier_quote_url`; carriers that couldn't
    be priced are in `not_priced:` with the reason. A line that isn't live yet comes
    back under `skipped` — relay it.
@@ -42,7 +43,13 @@ to compare, is deciding whether to switch, or wants to trade coverage against pr
 
 ## Presenting results
 
-- **Rank by the monthly point estimate**, cheapest first.
+- **Rank by the monthly point estimate**, cheapest first — **like-for-like only.** A
+  `C` row with `rated` (`rated_vs_asked` in structuredContent) is priced at a
+  different rung than asked, because the carrier doesn't offer the ask. Rank and
+  compute the spread over carriers priced at the ask. List a `rated` carrier
+  separately, with its rated limits beside its price and whether it covers `less` or
+  `more` than asked — never inside the like-for-like ranking. Offer to re-price
+  everyone at that rung for a like-for-like view.
 - Show a compact table: **Carrier · Monthly · 6-month total** (plus the interval when
   it matters), and the annual dollar spread between cheapest and priciest — that
   spread is the reason to compare.
