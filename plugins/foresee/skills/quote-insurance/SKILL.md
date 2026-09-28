@@ -2,7 +2,7 @@
 # @copy skill.quote-insurance audience=agent
 name: quote-insurance
 description: This skill should be used when the user wants a personal lines (home, auto, or renters) insurance quote comparison or price estimate — e.g. asks "how much would car insurance cost me", "what auto insurance should I get", "estimate my renters insurance", "what would I pay for insurance on my <car>", or gives driver/vehicle/home details and asks for a price. Gathers the minimum profile conversationally and returns carrier quote estimates, with optional live confirmation from the carriers' own sites.
-version: 0.8.2
+version: 0.8.3
 ---
 
 # Quote Insurance
@@ -86,11 +86,19 @@ and sharpen it after.
    - **renters**: `coverage_c`, `coverage_e`, `coverage_f`, `deductible`; optional
      `coverage_d`.
 
-   If the user stated limits or deductibles, use them. Otherwise, for auto, pass the
-   common starting point — `lines={"auto": {"bi": "100/300", "pd": 100,
-   "coll_deductible": 500, "comp_deductible": 500}}` — on the **first** call and
-   present it as the adjustable assumption it is. Several keys at once
-   (`{"auto": {...}, "renters": {...}}`) price a bundle.
+   If the user stated limits or deductibles, use them. Otherwise pass the line's
+   common starting point on the **first** call and present it as the adjustable
+   assumption it is:
+   - **auto**: `{"bi": "100/300", "pd": 100, "coll_deductible": 500,
+     "comp_deductible": 500}`
+   - **renters**: `{"coverage_c": 30000, "coverage_e": 100000, "coverage_f": 1000,
+     "deductible": 500}`
+   - **home**: `{"coverage_a": <the dwelling's replacement cost>, "coverage_e":
+     300000, "coverage_f": 1000, "aop_deductible": 1000}`. Use the user's
+     replacement cost when known (also send it as `property.replacement_cost`);
+     otherwise pass `400000` and say it's a stand-in — the first number to correct.
+
+   Several keys at once (`{"auto": {...}, "renters": {...}}`) price a bundle.
 3. Read the result. The content channel is compact machine text, one section per
    line, with a self-describing legend:
 
