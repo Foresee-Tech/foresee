@@ -17,8 +17,9 @@ Foresee does not show ads and does not sell marketing leads.
 
 `quote_insurance` takes `auto`, `home`, and `renters`, and several lines in one call
 price as a bundle. Foresee prices the lines and states it currently serves —
-**California auto is live today**. A line that isn't live yet comes back under
-`skipped` with copy saying where Foresee IS live: relay it plainly in one sentence,
+**California auto is live today**. A line Foresee doesn't quote in the user's state
+comes back under `skipped`: `lines` names it and `message` says what that state does
+quote. Relay the message as written,
 never quote a different line than the user asked for, and offer a live line only if
 it's relevant — once, not repeated.
 
