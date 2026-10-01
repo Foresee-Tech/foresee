@@ -1,0 +1,17 @@
+{
+  "name": "foresee",
+  "owner": {
+    "name": "Foresee Insurance Services, LLC",
+    "email": "support@go-foresee.com"
+  },
+  "metadata": {
+    "description": "Insurance quote comparison for Cursor."
+  },
+  "plugins": [
+    {
+      "name": "foresee",
+      "source": "plugins/foresee-cursor",
+      "description": "Shop for home and auto insurance with live carrier quotes. Instant quote estimates plus Foresee agents that complete the carriers' own quote flows — with the user's explicit consent — and read back the real page premium."
+    }
+  ]
+}
