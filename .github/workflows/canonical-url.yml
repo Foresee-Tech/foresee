@@ -1,6 +1,7 @@
 name: Canonical MCP URL
 
-# Public URL: https://agents.go-foresee.com/mcp — everywhere in this repo.
+# Public URL: https://agents.go-foresee.com/mcp — everywhere in this repo, except
+# the Cursor plugin, which points at https://cursor.go-foresee.com/mcp.
 # Never the generated *.run.app hostnames.
 
 on:

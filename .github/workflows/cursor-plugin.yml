@@ -1,0 +1,29 @@
+name: Cursor plugin
+
+# plugins/foresee-cursor is the Cursor build of plugins/foresee: the same
+# skills, pointed at cursor.go-foresee.com (results restated on the content
+# channel, the only one Cursor's model reads). The skills are byte-identical
+# mirrors, and the manifests must pass Cursor's own marketplace validator.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Skills mirror plugins/foresee
+        run: diff -r plugins/foresee/skills plugins/foresee-cursor/skills
+
+      - name: Cursor marketplace validator
+        run: |
+          base=https://raw.githubusercontent.com/cursor/plugins/main
+          mkdir -p schemas scripts
+          curl -fsSL "$base/schemas/plugin.schema.json" -o schemas/plugin.schema.json
+          curl -fsSL "$base/schemas/marketplace.schema.json" -o schemas/marketplace.schema.json
+          curl -fsSL "$base/scripts/validate-plugins.mjs" -o scripts/validate-plugins.mjs
+          npm install --no-save ajv ajv-formats
+          node scripts/validate-plugins.mjs
