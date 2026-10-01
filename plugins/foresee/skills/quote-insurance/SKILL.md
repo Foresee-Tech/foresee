@@ -108,14 +108,12 @@ and sharpen it after.
    | Prefix | Meaning |
    |---|---|
    | `Q` | What was priced: state, line, coverage selection (`sel`) |
-   | `factors:` | Names the `f0`, `f1`… ids the `F` rows use |
    | `assumptions:` | What Foresee assumed; `high_impact: true` materially moves the estimate |
    | `tighten_by:` | The missing facts that would most move the price |
    | `not_priced:` | Carriers excluded, with the reason |
    | `C` | Carrier, writing entity, monthly point estimate, `ci lo-hi`, and `rated` when the price is for a different rung than asked: `rated bi=30/60(asked 100/300,less)` |
    | `W` | A note on the carrier above, e.g. no online quote page |
    | `L` | Monthly cost per coverage or peril |
-   | `F` | One rating factor; values align with the `L` codes. Suffix: none = exact, `~` = derived, `?` = estimated |
    | `D` | Price ladder: every offered rung of a lever as ±$/mo vs the quoted monthly, everything else held |
 
    Beside `dense`, structuredContent carries the headline per line under `by_line`
@@ -248,6 +246,7 @@ quoting portal.
 Only state numbers the result contains, or `monthly` + a `D` delta. Answer a
 single-lever what-if ("what would a $1000 deductible cost?") straight from `D` — don't
 re-call. If a rung shows `(asked X)`, X isn't offered and the price sits at the nearest
-offered rung — say so. **Do not** multiply `F` factors, interpolate between rungs, or
-average carriers. For a change to several levers at once, or a carrier not returned,
-re-call with the new ask in `lines`.
+offered rung — say so. **Do not** interpolate between rungs or average
+carriers. For a change to several levers at once, or a carrier not returned,
+re-call with the new ask in `lines`. For a profile what-if (a cleaner record,
+another car, a different ZIP), re-call with the changed profile.

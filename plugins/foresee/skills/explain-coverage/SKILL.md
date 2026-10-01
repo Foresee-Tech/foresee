@@ -84,7 +84,7 @@ limit and it rises (you offload more).
 ## The one hard rule: never invent a price
 
 Every number you show must be one Foresee returned, or `monthly` + a `D` delta. Do not
-estimate a coverage change by multiplying `F` factors or interpolating — re-call the
+estimate a coverage change by interpolating — re-call the
 tool with the new ask and report what it prices. Definitions can be general; **dollars
 must come from Foresee.**
 
