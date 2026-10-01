@@ -86,8 +86,8 @@ cross-carrier mix (auto with one, renters with another), compare standalone tota
 ## The one hard rule: never invent a price
 
 Rank, filter, and pivot only over numbers Foresee returned, or `monthly` + a `D`
-delta. **Do not** multiply `F` factors, interpolate a rung, or synthesize one
-carrier's number from another's. For another carrier or coverage combination, call
+delta. **Do not** interpolate a rung or synthesize one carrier's number from
+another's. For another carrier or coverage combination, call
 the tool again.
 
 ## Honesty guardrails
