@@ -1,0 +1,31 @@
+# Publishes server.json to the MCP Registry. GitHub OIDC proves this run is in
+# a Foresee-Tech repo, which is what io.github.Foresee-Tech/* requires; no
+# OAuth app and no stored secret. Run by hand after bumping server.json.
+name: Publish to MCP Registry
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: v1.8.1
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install mcp-publisher
+        run: |
+          base="https://github.com/modelcontextprotocol/registry/releases/download/${VERSION}"
+          curl -fsSLO "${base}/mcp-publisher_linux_amd64.tar.gz"
+          curl -fsSL "${base}/registry_${VERSION#v}_checksums.txt" | grep ' mcp-publisher_linux_amd64.tar.gz$' | sha256sum -c -
+          tar xzf mcp-publisher_linux_amd64.tar.gz mcp-publisher
+
+      - name: Publish
+        run: |
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
