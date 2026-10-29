@@ -56,7 +56,7 @@ their price.
 1. If the question is state- or carrier-specific, ground it with
    **`quote_insurance`**. Pass the ask in `lines` as actual numbers — the user's
    limits, or for auto the common start: `lines={"auto": {"bi": "100/300", "pd": 100,
-   "coll_deductible": 500, "comp_deductible": 500}}`.
+   "coll_deductible": 500, "comp_deductible": 500, "medpay": 5000}}`.
 2. Explain the concepts the user asked about, defining jargon the first time it
    appears.
 3. When a quote is in play, ground it in that user's numbers: each carrier's `L` row

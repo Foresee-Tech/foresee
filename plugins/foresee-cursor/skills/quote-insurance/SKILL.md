@@ -92,7 +92,7 @@ and sharpen it after.
    common starting point on the **first** call and present it as the adjustable
    assumption it is:
    - **auto**: `{"bi": "100/300", "pd": 100, "coll_deductible": 500,
-     "comp_deductible": 500}`
+     "comp_deductible": 500, "medpay": 5000}`
    - **renters**: `{"coverage_c": 30000, "coverage_e": 100000, "coverage_f": 1000,
      "deductible": 500}`
    - **home**: `{"coverage_a": <the dwelling's replacement cost>, "coverage_e":
@@ -152,9 +152,11 @@ So: incomplete profile → **point estimate + name the assumptions**, never a wi
   and the price is for the nearest one it does offer. Put the rated limits beside
   that price every time you show it ("$164/mo — 30/60 BI / $25k PD, the most this
   carrier offers, not the 100/300 / $100k you asked for"), and say plainly when it
-  covers `less`. It is not like-for-like: never lead with it as the best option
-  without saying so, and compute the spread over like-for-like carriers (or say
-  which it includes). Offer to re-price everyone at that rung.
+  covers `less`. A `rated` of `0` means the carrier doesn't sell that coverage in
+  the state (e.g. no medical payments), so the price carries none of it — say so.
+  It is not like-for-like: never lead with it as the best option without saying
+  so, and compute the spread over like-for-like carriers (or say which it
+  includes). Offer to re-price everyone at that rung.
 - Relay every `W` warning and every `not_priced` carrier with its reason (e.g. USAA
   for a household that isn't military-affiliated) — a carrier never silently vanishes.
 - **Bundles:** `bundle` gives each carrier's `bundle_total`, `standalone_total` and
