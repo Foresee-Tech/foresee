@@ -92,7 +92,9 @@ and sharpen it after.
    common starting point on the **first** call and present it as the adjustable
    assumption it is:
    - **auto**: `{"bi": "100/300", "pd": 100, "coll_deductible": 500,
-     "comp_deductible": 500, "medpay": 5000}`
+     "comp_deductible": 500, "medpay": 5000}` — the same in every state. Where the
+     user's state requires more (personal injury protection in no-fault states, a
+     lawsuit option), the quote prices the state's own and says so in `state_notes`.
    - **renters**: `{"coverage_c": 30000, "coverage_e": 100000, "coverage_f": 1000,
      "deductible": 500}`
    - **home**: `{"coverage_a": <the dwelling's replacement cost>, "coverage_e":
@@ -109,6 +111,7 @@ and sharpen it after.
    | Prefix | Meaning |
    |---|---|
    | `Q` | What was priced: state, line, coverage selection (`sel`) |
+   | `state_notes:` | What the user's state means for these quotes: its legal minimum, its PIP and lawsuit option (and what was priced when the ask named none), facts its law bars insurers from pricing on, carriers that don't sell there |
    | `assumptions:` | What Foresee assumed; `high_impact: true` materially moves the estimate |
    | `tighten_by:` | The missing facts that would most move the price |
    | `not_priced:` | Carriers excluded, with the reason |
@@ -120,7 +123,7 @@ and sharpen it after.
    Beside `dense`, structuredContent carries the headline per line under `by_line`
    (`carriers[]` with `monthly`, `confidence_interval`, `carrier_quote_url`,
    `warnings`, and `rated_vs_asked` rows — `axis`, `asked`, `rated`, `coverage` — the
-   same facts as `rated`; plus `assumptions`, `tighten_by`, `failures`), and
+   same facts as `rated`; plus `state_notes`, `assumptions`, `tighten_by`, `failures`), and
    `presentation`, `bundle` and `skipped` at the top. Refusals and errors
    (`profile_required`, `coverage_required`) are JSON with no `dense`.
 
@@ -157,6 +160,10 @@ So: incomplete profile → **point estimate + name the assumptions**, never a wi
   It is not like-for-like: never lead with it as the best option without saying
   so, and compute the spread over like-for-like carriers (or say which it
   includes). Offer to re-price everyone at that rung.
+- **Relay the state notes.** Each `state_notes` entry's `text` is written to be
+  passed on: say what the state added to the coverage ("Minnesota requires PIP, so
+  these prices include its $20,000 minimum"), and when a note says the law bars
+  pricing on a fact (credit, gender), don't ask the user for it.
 - Relay every `W` warning and every `not_priced` carrier with its reason (e.g. USAA
   for a household that isn't military-affiliated) — a carrier never silently vanishes.
 - **Bundles:** `bundle` gives each carrier's `bundle_total`, `standalone_total` and
