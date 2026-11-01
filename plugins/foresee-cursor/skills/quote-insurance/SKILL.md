@@ -35,6 +35,11 @@ it's relevant — once, not repeated.
 
 Lead with 1; offer 2 when the user is ready to act on firm numbers.
 
+No `foresee` tools connected? The same tools answer over plain HTTP:
+`curl https://agents.go-foresee.com` prints usage. POST a tool's arguments as JSON
+to `https://agents.go-foresee.com/tools/<tool name>`; the JSON body carries
+everything the MCP result would, and everything below applies unchanged.
+
 ## When this applies
 
 The user wants to know what insurance would cost them, or gives details
