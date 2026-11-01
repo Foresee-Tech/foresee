@@ -119,7 +119,7 @@ and sharpen it after.
    | `state_notes:` | What the user's state means for these quotes: its legal minimum, its PIP and lawsuit option (and what was priced when the ask named none), facts its law bars insurers from pricing on, carriers that don't sell there |
    | `assumptions:` | What Foresee assumed; `high_impact: true` materially moves the estimate |
    | `tighten_by:` | The missing facts that would most move the price |
-   | `not_priced:` | Carriers excluded, with the reason |
+   | `not_priced:` | Carriers without a price: the carrier's own answer (it doesn't sell the line there, only quotes military families…), or "Foresee couldn't get a quote." |
    | `C` | Carrier, writing entity, monthly point estimate, `ci lo-hi`, and `rated` when the price is for a different rung than asked: `rated bi=30/60(asked 100/300,less)` |
    | `W` | A note on the carrier above, e.g. no online quote page |
    | `L` | Monthly cost per coverage or peril |
@@ -169,8 +169,9 @@ So: incomplete profile → **point estimate + name the assumptions**, never a wi
   passed on: say what the state added to the coverage ("Minnesota requires PIP, so
   these prices include its $20,000 minimum"), and when a note says the law bars
   pricing on a fact (credit, gender), don't ask the user for it.
-- Relay every `W` warning and every `not_priced` carrier with its reason (e.g. USAA
-  for a household that isn't military-affiliated) — a carrier never silently vanishes.
+- Relay every `W` warning and every `not_priced` carrier as written: the carrier's own
+  answer (e.g. USAA for a household that isn't military-affiliated), or that Foresee
+  couldn't get the quote — never guess why. A carrier never silently vanishes.
 - **Bundles:** `bundle` gives each carrier's `bundle_total`, `standalone_total` and
   `savings`; its per-line prices assume every bundled line is placed with that
   carrier. For a cross-carrier mix, compare standalone totals.
@@ -229,7 +230,10 @@ re-submitted, and a profile already walked returns those results. Read:
   `breakdown`, `bound`, `variants`, `quote_number`.
 - `declined: true` — the carrier reviewed the details and refused to quote. **An
   answer, not an error** — relay it.
-- `skipped` / `not_dispatched` — carriers not walked, each with the reason. Relay them.
+- `not_dispatched` — carriers with an estimate that this run won't quote live, each with
+  `by` and `detail`: `by: carrier` is the carrier's own answer (e.g. it sells there only
+  through agents); `by: foresee` means Foresee couldn't get a live quote — say only that.
+  `skipped` — carriers whose form needs facts the profile lacks. Relay them.
 - `assumptions` — minor form facts the walks answered with declared no-claim values
   (`field` + `assumed`). Relay every one; if the user corrects one, re-call with the
   real value at that path.
