@@ -58,8 +58,8 @@ conversationally, never demand it:
 - **Driving record** — per driver, `auto.drivers[].accidents` / `violations` as lists
   of dated entries: `{"on": "2025-01", "kind": "speeding"}` (an empty list is a clean
   record).
-- `marital_status`, `gender`, `credit_range`, `home_ownership_status`,
-  `prior_insurance` (insurance for the same line).
+- `marital_status`, `gender`, `credit_range` (or `credit_score` when the user gives
+  a number), `home_ownership_status`, `prior_insurance` (insurance for the same line).
 - `companion_policies` — other policies the household already holds, each with the
   carrier that writes it: `{"line": "home", "carrier": "State Farm"}`. Only that
   carrier's multi-policy discount applies, so ask who writes the policy. Without a
